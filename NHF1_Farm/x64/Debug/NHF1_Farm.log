@@ -1,0 +1,30 @@
+﻿  character.c
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\character.c(6,60): warning C4305: 'function': truncation from 'double' to 'float'
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\character.c(7,60): warning C4305: 'function': truncation from 'double' to 'float'
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\character.c(8,57): warning C4305: 'function': truncation from 'double' to 'float'
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\character.c(9,57): warning C4305: 'function': truncation from 'double' to 'float'
+  game.c
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\game.c(35,20): warning C4013: 'rand' undefined; assuming extern returning int
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\game.c(36,10): warning C4047: 'initializing': 'int' differs in levels of indirection from 'void *'
+  render.c
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\render.c(21,46): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\render.c(22,47): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\render.c(58,31): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\render.c(59,41): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\render.c(81,40): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\busin\Desktop\Suli\NHF1_Farm\src\render.c(89,37): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1392,5): warning MSB8012: TargetPath(C:\Users\busin\Desktop\Suli\NHF1_Farm\x64\Debug\NHF1_Farm.exe) does not match the Linker's OutputFile property value (C:\Users\busin\Desktop\Suli\NHF1_Farm\build\NHF1_Farm-x64.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1394,5): warning MSB8012: TargetName(NHF1_Farm) does not match the Linker's OutputFile property value (NHF1_Farm-x64). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+  LINK : 0 new modules and 3 (out of 43) modules have changed since prior linking
+  Starting pass 2
+       render.obj
+       game.obj
+       character.obj
+       MSVCRTD.lib(loadcfg.obj)
+  Finished pass 2
+  NHF1_Farm.vcxproj -> C:\Users\busin\Desktop\Suli\NHF1_Farm\x64\Debug\NHF1_Farm.exe
+  C:\Users\busin\Desktop\Suli\NHF1_Farm\lib\SDL2\lib\x64\SDL2.dll
+  1 File(s) copied
+  C:\Users\busin\Desktop\Suli\NHF1_Farm\lib\SDL2_image\lib\x64\SDL2_image.dll
+  1 File(s) copied
