@@ -7,41 +7,47 @@
 #include <stdlib.h>
 #include <SDL_image.h>
 
-SDL_Texture* loadTexture(const char* path, SDL_Renderer* renderer) {
-	SDL_Surface* loadedSurface = IMG_Load(path);
-	if (!loadedSurface) {
-		printf("Can't load image. Error: %s", IMG_GetError());
-		return NULL;
-	}
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-	SDL_FreeSurface(loadedSurface);
-	return texture;
-}
 void updateCamera(Camera* camera, Character* player) {
-	camera->x = player->x - (camera->width / 2) + (player->width / 2);
-	camera->y = player->y - (camera->height / 2) + (player->height / 2);
+	camera->x = player->x - camera->width / 2;
+	camera->y = player->y - camera->height / 2;
+	//alignment
+	camera->x = ((float)camera->x / (TILE_SIZE * SCALINGFACTOR)) * (TILE_SIZE * SCALINGFACTOR);
+	camera->y = ((float)camera->y / (TILE_SIZE * SCALINGFACTOR)) * (TILE_SIZE * SCALINGFACTOR);
 
-	if (camera->x < 0) camera->x = 0;
-	if (camera->x < 0) camera->y = 0;
-	if (camera->x > (MAP_WIDTH * TILE_SIZE) - camera->width)
-		camera->x = (MAP_WIDTH * TILE_SIZE) - camera->width;
-	if (camera->y > (MAP_HEIGHT * TILE_SIZE) - camera->height)
-		camera->y = (MAP_HEIGHT * TILE_SIZE) - camera->height;
+	//border checking
+	if (camera->x < 0) { 
+		camera->x = 0; 
+	}
+	if (camera->y < 0) {
+		camera->y = 0;
+	}
+
+	if (camera->x > (MAP_WIDTH * TILE_SIZE * SCALINGFACTOR) - camera->width) {
+		camera->x = (MAP_WIDTH * TILE_SIZE * SCALINGFACTOR) - camera->width;
+	}
+	if (camera->y > (MAP_HEIGHT * TILE_SIZE * SCALINGFACTOR) - camera->height) {
+		camera->y = (MAP_HEIGHT * TILE_SIZE * SCALINGFACTOR) - camera->height;
+	}
 }
 
 void renderMap(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* otherTexture, Camera* camera) {
-	int startTileX = camera->x / TILE_SIZE;
-	int startTileY = camera->y / TILE_SIZE;
-	int endTileX = (camera->x + camera->width) / TILE_SIZE;
-	int endTileY = (camera->y + camera->height) / TILE_SIZE;
+	int startTileX = camera->x / (TILE_SIZE * SCALINGFACTOR);
+	int startTileY = camera->y / (TILE_SIZE * SCALINGFACTOR);
+	int endTileX = (camera->x + camera->width) / (TILE_SIZE * SCALINGFACTOR);
+	int endTileY = (camera->y + camera->height) / (TILE_SIZE * SCALINGFACTOR);
+
+	if (startTileX < 0) startTileX = 0;
+	if (startTileY < 0) startTileY = 0;
+	if (endTileX >= MAP_WIDTH) endTileX = MAP_WIDTH - 1;
+	if (endTileY >= MAP_HEIGHT) endTileY = MAP_HEIGHT - 1;
 
 	for (int y = startTileY; y <= endTileY; y++) {
-		for (int x = startTileY; x < endTileX; x++) {
+		for (int x = startTileX; x <= endTileX; x++) {
 			SDL_Rect dest = {
-				x * TILE_SIZE * SCALINGFACTOR - camera->x,
-				y * TILE_SIZE * SCALINGFACTOR - camera->y,
-				TILE_SIZE * SCALINGFACTOR,
-				TILE_SIZE * SCALINGFACTOR
+				(x * TILE_SIZE * SCALINGFACTOR) - camera->x,
+				(y * TILE_SIZE * SCALINGFACTOR) - camera->y,
+				TILE_SIZE* SCALINGFACTOR,
+				TILE_SIZE* SCALINGFACTOR
 			};
 			Block currentBlock = map.blocks[y][x];
 			if (currentBlock.id == 0) {
@@ -54,12 +60,11 @@ void renderMap(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* o
 	}
 }
 void renderCharacter(SDL_Renderer* renderer, Character* player, Camera* camera) {
-	SDL_Rect dest = {
-		(player->x * SCALINGFACTOR) - camera->x,
-		player->y * SCALINGFACTOR - camera->y - (player->height * SCALINGFACTOR - TILE_SIZE * SCALINGFACTOR),
-		player->width * SCALINGFACTOR,
-		player->height * SCALINGFACTOR
-	};
+	SDL_Rect dest;
+	dest.x = (screen_x / 2) - (player->width * SCALINGFACTOR / 2);
+	dest.y = (screen_y / 2) - (player->height * SCALINGFACTOR / 2);
+	dest.w = (int)(player->width * SCALINGFACTOR);
+	dest.h = (int)(player->height * SCALINGFACTOR);
 	SDL_RenderCopy(renderer, player->texture, NULL, &dest);
 }
 
@@ -107,6 +112,17 @@ void renderGame(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* 
 	SDL_RenderPresent(renderer);
 }
 
+SDL_Texture* loadTexture(const char* path, SDL_Renderer* renderer) {
+	SDL_Surface* loadedSurface = IMG_Load(path);
+	if (!loadedSurface) {
+		printf("Can't load image. Error: %s", IMG_GetError());
+		return NULL;
+	}
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+	SDL_FreeSurface(loadedSurface);
+	return texture;
+}
+
 SDL_Window* initWindow(const char* windowName, int width, int height) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf("SDL_Init Error: %s\n", SDL_GetError());
@@ -127,43 +143,3 @@ SDL_Window* initWindow(const char* windowName, int width, int height) {
 
 	return window;
 }
-
-
-/*void generatePlayArea(SDL_Texture* tileTexture, int scaleFactor) {
-	for (int y = 0; y <= MAP_HEIGHT; y++) {
-		for (int x = 0; x <= MAP_WIDTH; x++) {
-			SDL_Rect destRect = {
-				x * tileWidth * scaleFactor,
-				y * tileHeight * scaleFactor,
-				tileWidth * scaleFactor,
-				tileHeight * scaleFactor
-			};
-			Block block = {
-				x,
-				y,
-				1,
-				999
-			};
-			map.blocks[x][y] = block;
-			switch (rand() % 2) {
-			case 0:
-				SDL_RenderCopyEx(gameRenderer, tileTexture, NULL, &destRect, 0, 0, 90);
-				break;
-			case 1:
-				SDL_RenderCopyEx(gameRenderer, tileTexture, NULL, &destRect, 0, 0, 180);
-				break;
-			case 2:
-				SDL_RenderCopyEx(gameRenderer, tileTexture, NULL, &destRect, 0, 0, 270);
-				break;
-			}
-		}
-	} 
-	SDL_RenderPresent(gameRenderer);
-}
-*/
-//void InitStage(void) {
-//	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
-//	SDL_SetRenderDrawColor(gameRenderer, 0xA1, 0xDA, 0xAA, 0xFF);
-//	SDL_RenderClear(gameRenderer);
-//}
-//SDL_Event e; bool quit = false; while (quit == false) { while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) quit = true; } }

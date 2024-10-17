@@ -8,15 +8,18 @@
 #include "definitions.h"
 #include "structures.h"
 #include "render.h"
+#include "character.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
-#include "character.h"
 SDL_Window* gameWindow = NULL;
 SDL_Renderer* gameRenderer = NULL;
 SDL_Texture* gameTexture = NULL;
 
 void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera);
+Uint32 frameStart;
+int frameTime;
+float deltaTime = 0.0f;
 
 int GameInit() {
 
@@ -26,8 +29,7 @@ int GameInit() {
 	}
 
 	gameWindow = initWindow("FarmGame", screen_x, screen_y);
-	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED);
-	Camera camera = { 0,0, screen_x, screen_y };
+	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_Texture* grass = loadTexture("../assets/grass.png", gameRenderer);
 	SDL_Texture* characterTexture = loadTexture("../assets/character.png", gameRenderer);
 	for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -45,8 +47,11 @@ int GameInit() {
 	}
 	Character* player = (Character*)malloc(sizeof(Character));
 	initPlayer(player);
+	Camera camera = { player->x - (screen_x / 2),player->y - (screen_y / 2), screen_x, screen_y};
 	player->texture = characterTexture;
 	gameLoop(gameRenderer, player, grass, &camera);
+
+	//shutdown
 	SDL_DestroyTexture(grass);
 	SDL_DestroyTexture(characterTexture);
 	SDL_DestroyRenderer(gameRenderer);
@@ -61,16 +66,22 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 	SDL_Texture* otherTexture = loadTexture("../assets/farmland1.png", renderer);
 	int quit = 0;
-	while (1) {
+	while (quit == 0) {
+		frameStart = SDL_GetTicks();
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				quit = 1;
 			}
 		}
-		handleInput(player, keystate);
+		handleInput(player, keystate, deltaTime);
 		SDL_RenderClear(renderer);
 		renderGame(renderer, grassTexture, otherTexture, player, camera);
 		SDL_RenderPresent(renderer);
+		frameTime = SDL_GetTicks() - frameStart;
+		if (FRAME_DELAY > frameTime) {
+			SDL_Delay(FRAME_DELAY - frameTime);
+		}
+		deltaTime = (float)frameTime / 1000.0f; 
 	}
 
 }

@@ -1,9 +1,10 @@
 #pragma once
 #define TILE_SIZE 16
-#define MAP_WIDTH (screen_x / TILE_SIZE)
-#define MAP_HEIGHT (screen_y / TILE_SIZE)
+#define MAP_WIDTH 80
+#define MAP_HEIGHT 80
 #define screen_x 1200
 #define screen_y 800
 #define MAX_TILES 16
-#define SCALINGFACTOR 2
-#define ASSETS_PATH
+#define SCALINGFACTOR 4
+#define TARGET_FPS 999
+#define FRAME_DELAY (1000 / TARGET_FPS)

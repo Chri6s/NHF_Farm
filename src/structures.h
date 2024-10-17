@@ -19,7 +19,7 @@ typedef struct {
 } Map;
 
 typedef struct {
-	int x, y;
+	float x, y;
 	int width, height;
 } Camera;
 
