@@ -45,6 +45,9 @@ int GameInit() {
 			map.blocks[y][x] = block;
 		}
 	}
+	SDL_Surface* iconSurface = IMG_Load("../assets/icon.png");
+	SDL_SetWindowIcon(gameWindow, iconSurface);
+	SDL_FreeSurface(iconSurface);
 	Character* player = (Character*)malloc(sizeof(Character));
 	initPlayer(player);
 	Camera camera = { player->x - (screen_x / 2),player->y - (screen_y / 2), screen_x, screen_y};
