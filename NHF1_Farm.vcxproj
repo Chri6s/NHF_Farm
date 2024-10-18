@@ -147,9 +147,6 @@ xcopy /Y "$(SolutionDir)lib\SDL2_image\lib\x64\SDL2_image.dll" "$(SolutionDir)bu
     <ClCompile Include="src\render.c" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\SDL2\lib\x64\SDL2.lib" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\game.h" />
