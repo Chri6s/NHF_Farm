@@ -3,7 +3,7 @@
 #include "game.h"
 
 int main(int argc, char* argv[]) {
-    SetConsoleTitle(L"FarmGame Debug");
+    SetConsoleTitle(L"FarmR Debug");
     GameInit();
     return 0;
 }
