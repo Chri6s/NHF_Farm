@@ -9,6 +9,8 @@
 #include "structures.h"
 #include "render.h"
 #include "character.h"
+#include "main.h"
+#include <stdlib.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
@@ -28,7 +30,7 @@ int GameInit() {
 		return -1;
 	}
 
-	gameWindow = initWindow("FarmR", screen_x, screen_y);
+	gameWindow = initWindow("FarmR", settings.screen_x, settings.screen_y);
 	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_Texture* grass = loadTexture("../assets/grass.png", gameRenderer);
 	SDL_Texture* characterTexture = loadTexture("../assets/character.png", gameRenderer);
@@ -39,8 +41,8 @@ int GameInit() {
 				x,
 				y,
 				0,
-				NULL,
-				rotation
+				rotation,
+				NULL
 			};
 			map.blocks[y][x] = block;
 		}
@@ -50,7 +52,7 @@ int GameInit() {
 	SDL_FreeSurface(iconSurface);
 	Character* player = (Character*)malloc(sizeof(Character));
 	initPlayer(player);
-	Camera camera = { player->x - (screen_x / 2),player->y - (screen_y / 2), screen_x, screen_y};
+	Camera camera = { player->x - (settings.screen_x / 2),player->y - (settings.screen_y / 2), settings.screen_x, settings.screen_y};
 	player->texture = characterTexture;
 	gameLoop(gameRenderer, player, grass, &camera);
 

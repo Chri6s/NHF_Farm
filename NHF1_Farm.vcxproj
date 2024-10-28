@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)lib\SDL2_image\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64); $(ProjectDir)lib\SDL2_image\lib\x64</LibraryPath>
+    <IncludePath>$(ProjectDir)lib\SDL2_image\include;$(IncludePath); $(ProjectDir)lib\SDL2_ttf\include;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64); $(ProjectDir)lib\SDL2_image\lib\x64; $(ProjectDir)lib\SDL2_ttf\lib\x64 </LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,21 +108,22 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include; $(ProjectDir)lib\SDL2_image\include </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include; $(ProjectDir)lib\SDL2_image\include; $(ProjectDir)lib\SDL2_ttf\include </AdditionalIncludeDirectories>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(ProjectDir)build\$(ProjectName)-$(Platform).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib\SDL2\lib\x64\;$(ProjectDir)lib\SDL2_image\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)lib\SDL2\lib\x64\;$(ProjectDir)lib\SDL2_image\lib\x64\; $(ProjectDir)lib\SDL2_ttf\lib\x64\</AdditionalLibraryDirectories>
       <ShowProgress>LinkVerbose</ShowProgress>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies);SDL2_image.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies);SDL2_image.lib; SDL2_ttf.lib</AdditionalDependencies>
       <EmbedManagedResourceFile>$(ProjectDir)assets/app_icon.rc</EmbedManagedResourceFile>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "$(SolutionDir)lib\SDL2\lib\x64\SDL2.dll" "$(SolutionDir)build\"
 xcopy /Y "$(SolutionDir)lib\SDL2_image\lib\x64\SDL2_image.dll" "$(SolutionDir)build\"
-</Command>
+xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,11 +147,13 @@ xcopy /Y "$(SolutionDir)lib\SDL2_image\lib\x64\SDL2_image.dll" "$(SolutionDir)bu
     <ClCompile Include="src\game.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\render.c" />
+    <ClCompile Include="src\saveManager.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\main.h" />
     <ClInclude Include="src\render.h" />
     <ClInclude Include="src\structures.h" />
   </ItemGroup>

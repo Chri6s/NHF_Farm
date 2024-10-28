@@ -1,3 +1,4 @@
+#include "main.h"
 #include "render.h"
 #include "definitions.h"
 #include "structures.h"
@@ -53,7 +54,7 @@ void renderMap(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* o
 			if (currentBlock.id == 0) {
 				SDL_RenderCopyEx(renderer, grassTexture, NULL, &dest, 0, 0, currentBlock.rotation);
 			}
-			else if (map.blocks[y][x].id == 1) {
+			else if (currentBlock.id == 1) {
 				SDL_RenderCopy(renderer, otherTexture, NULL, &dest);
 			}
 		}
@@ -61,8 +62,8 @@ void renderMap(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* o
 }
 void renderCharacter(SDL_Renderer* renderer, Character* player, Camera* camera) {
 	SDL_Rect dest;
-	dest.x = (screen_x / 2) - (player->width * SCALINGFACTOR / 2);
-	dest.y = (screen_y / 2) - (player->height * SCALINGFACTOR / 2);
+	dest.x = (settings.screen_x / 2) - (player->width * SCALINGFACTOR / 2);
+	dest.y = (settings.screen_y / 2) - (player->height * SCALINGFACTOR / 2);
 	dest.w = (int)(player->width * SCALINGFACTOR);
 	dest.h = (int)(player->height * SCALINGFACTOR);
 	SDL_RenderCopy(renderer, player->texture, NULL, &dest);

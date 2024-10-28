@@ -4,7 +4,8 @@
 #include <SDL.h>
 
 typedef struct {
-	int x, y, id, growingProgress, rotation;
+	int x, y, id, rotation;
+	int planatable;
 } Block;
 
 typedef struct {
@@ -23,5 +24,8 @@ typedef struct {
 	int width, height;
 } Camera;
 
+typedef struct {
+	int screen_x, screen_y, target_fps;
+} GameSettings;
 // define here, to access everywhere
 Map map; // The main map which stores every block and its data.
