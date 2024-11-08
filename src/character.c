@@ -1,14 +1,25 @@
 #include "character.h"
 #include "structures.h"
+#include "game.h"
 #include <SDL.h>
+#include <stdio.h>
 
-void handleInput(Character* player, const Uint8* keystate, float deltaTime) {
+void handleKeyboardInput(Character* player, const Uint8* keystate, float deltaTime, SDL_Event event) {
 	float speed = 394.5f;
+	int gkeypressed = 0;
 	if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) moveCharacter(player, 0, -speed * deltaTime);
 	if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) moveCharacter(player, 0, speed * deltaTime);
 	if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) moveCharacter(player, -speed * deltaTime, 0);
 	if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) moveCharacter(player, speed * deltaTime, 0);
-}
+	if (keystate[SDL_SCANCODE_G] && event.type == SDL_KEYDOWN && !gkeypressed) { 
+		editMode = !editMode;
+		gkeypressed = 1;
+		printf("editMode is 1!");
+	}
+	if (event.type == SDL_KEYUP && keystate[SDL_SCANCODE_G]) {
+		gkeypressed = 0;
+	}
+} 
 
 void moveCharacter(Character* player, float deltaX, float deltaY) {
 	player->x += deltaX;

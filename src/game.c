@@ -22,6 +22,7 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 Uint32 frameStart;
 int frameTime;
 float deltaTime = 0.0f;
+int editMode = 1;
 
 int GameInit() {
 
@@ -34,8 +35,8 @@ int GameInit() {
 	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_Texture* grass = loadTexture("../assets/grass.png", gameRenderer);
 	SDL_Texture* characterTexture = loadTexture("../assets/character.png", gameRenderer);
-	for (int y = 0; y < MAP_HEIGHT; y++) {
-		for (int x = 0; x < MAP_WIDTH; x++) {
+	for (int x = 0; x < MAP_WIDTH; x++) {
+		for (int y = 0; y < MAP_HEIGHT; y++) {
 			int rotation = (rand() % 3) * 90;
 			Block block = {
 				x,
@@ -44,7 +45,7 @@ int GameInit() {
 				rotation,
 				NULL
 			};
-			map.blocks[y][x] = block;
+			map.blocks[x][y] = block;
 		}
 	}
 	SDL_Surface* iconSurface = IMG_Load("../assets/icon.png");
@@ -66,6 +67,31 @@ int GameInit() {
 	return 0;
 }
 
+void editTile(int tileX, int tileY) {
+	if (tileX >= 0 && tileY >= 0 && tileX < MAP_WIDTH && tileY < MAP_HEIGHT) {
+		// Check if tile is already farmland; if not, change it
+		if (map.blocks[tileX][tileY].id != 1) {
+			printf("edited!");
+			map.blocks[tileX][tileY].id = 1;
+		}
+	}
+}
+
+void editMap(Camera* camera, SDL_Event event) {
+	int mouseX, mouseY;
+	SDL_GetMouseState(&mouseX, &mouseY);
+	int selectedTileX = (mouseX / SCALINGFACTOR + camera->x) / TILE_WIDTH;
+	int selectedTileY = (mouseY / SCALINGFACTOR + camera->y) / TILE_HEIGHT;
+	printf("%d ", selectedTileX);
+	printf("%d\n", selectedTileY);
+	renderTileOutline(gameRenderer, selectedTileX, selectedTileY);
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
+			editTile(selectedTileX, selectedTileY);
+		}
+	}
+}
+
 void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera) {
 	SDL_Event event;
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
@@ -78,9 +104,12 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 				quit = 1;
 			}
 		}
-		handleInput(player, keystate, deltaTime);
+
+		handleKeyboardInput(player, keystate, deltaTime, event);
 		SDL_RenderClear(renderer);
 		renderGame(renderer, grassTexture, otherTexture, player, camera);
+		if (editMode == 1) editMap(camera, event);
+
 		SDL_RenderPresent(renderer);
 		frameTime = SDL_GetTicks() - frameStart;
 		if (FRAME_DELAY > frameTime) {

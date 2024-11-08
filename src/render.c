@@ -42,15 +42,15 @@ void renderMap(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* o
 	if (endTileX >= MAP_WIDTH) endTileX = MAP_WIDTH - 1;
 	if (endTileY >= MAP_HEIGHT) endTileY = MAP_HEIGHT - 1;
 
-	for (int y = startTileY; y <= endTileY; y++) {
-		for (int x = startTileX; x <= endTileX; x++) {
+	for (int x = startTileX; x <= endTileX; x++) {
+		for (int y = startTileY; y <= endTileY; y++) {
 			SDL_Rect dest = {
 				(x * TILE_SIZE * SCALINGFACTOR) - camera->x,
 				(y * TILE_SIZE * SCALINGFACTOR) - camera->y,
-				TILE_SIZE* SCALINGFACTOR,
-				TILE_SIZE* SCALINGFACTOR
+				TILE_SIZE * SCALINGFACTOR,
+				TILE_SIZE * SCALINGFACTOR
 			};
-			Block currentBlock = map.blocks[y][x];
+			Block currentBlock = map.blocks[x][y];
 			if (currentBlock.id == 0) {
 				SDL_RenderCopyEx(renderer, grassTexture, NULL, &dest, 0, 0, currentBlock.rotation);
 			}
@@ -92,8 +92,8 @@ void renderScene(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTe
 	}
 	renderCharacter(renderer, player, camera);
 
-	for (int y = player->y / TILE_SIZE + 1; y < MAP_HEIGHT; y++) {
-		for (int x = 0; x < MAP_WIDTH; x++) {
+	for (int x = 0; x < MAP_WIDTH; x++) {
+		for (int y = player->y / TILE_SIZE + 1; y < MAP_HEIGHT; y++) {
 			SDL_Rect dest = {
 				x * TILE_SIZE * SCALINGFACTOR,
 				y * TILE_SIZE * SCALINGFACTOR,
@@ -105,6 +105,30 @@ void renderScene(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTe
 	}
 
 }
+void renderTileOutline(SDL_Renderer* renderer, int selectedTileX, int selectedTileY) {
+	int baseX = selectedTileX * TILE_WIDTH * SCALINGFACTOR;
+	int baseY = selectedTileY * TILE_HEIGHT * SCALINGFACTOR;
+	if (selectedTileX >= 0 && selectedTileY >= 0) {
+		SDL_Rect outlineRect = {
+			baseX,
+			baseY,
+			TILE_WIDTH * SCALINGFACTOR,
+			TILE_HEIGHT * SCALINGFACTOR
+		};
+		SDL_SetRenderDrawColor(renderer, 204, 204, 204, 255);
+		SDL_RenderDrawRect(renderer, &outlineRect);
+		for (int i = 0; i < 3; ++i) {  // Adjust the loop count to make it thicker
+			SDL_Rect outlineRect = {
+				baseX + i,        // Shift right by i pixels
+				baseY + i,        // Shift down by i pixels
+				TILE_WIDTH - 2 * i, // Decrease width by 2*i to keep centered
+				TILE_HEIGHT - 2 * i // Decrease height by 2*i to keep centered
+			};
+			SDL_RenderDrawRect(renderer, &outlineRect);
+		}
+
+	}
+}
 
 void renderGame(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* otherTexture, Character* player, Camera* camera) {
 	updateCamera(camera, player);
@@ -112,7 +136,6 @@ void renderGame(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* 
 	renderCharacter(renderer, player, camera);
 	SDL_RenderPresent(renderer);
 }
-
 SDL_Texture* loadTexture(const char* path, SDL_Renderer* renderer) {
 	SDL_Surface* loadedSurface = IMG_Load(path);
 	if (!loadedSurface) {

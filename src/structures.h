@@ -15,7 +15,7 @@ typedef struct {
 } Character;
 
 typedef struct {
-	Block blocks[MAP_HEIGHT][MAP_WIDTH];
+	Block blocks[MAP_WIDTH][MAP_HEIGHT];
 	char name[];
 } Map;
 
