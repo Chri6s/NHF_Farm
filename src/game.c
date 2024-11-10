@@ -24,11 +24,10 @@ int frameTime;
 float deltaTime = 0.0f;
 int editMode = 1;
 
-/*
-* The main Initalization function for the game.
+/**
+* @brief The main Initalization function for the game.
 * @returns void
 */
-
 void GameInit() {
 
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
@@ -70,10 +69,10 @@ void GameInit() {
 	IMG_Quit();
 	SDL_Quit();
 }
-/*
-* @brief editTile asdasdasd
-* @params tileX The X coordinate of the choosen tile
-* @params tileY The Y coordinate of the choosen tile 
+/**
+* @brief Edits the Tile at the coordinate
+* @param tileX The X coordinate of the choosen tile
+* @param tileY The Y coordinate of the choosen tile 
 * @returns void
 */
 void editTile(int tileX, int tileY) {
@@ -85,10 +84,10 @@ void editTile(int tileX, int tileY) {
 		}
 	}
 }
-/*
+/**
 * @brief Handles the logic for editing the map when switching on edit mode with G
-* @params camera The camera's X and Y coordinates are needed for calculating the currently selected Tile
-* @params event The event used for checking if the player clicked a Tile to edit.
+* @param camera The camera's X and Y coordinates are needed for calculating the currently selected Tile
+* @param event The event used for checking if the player clicked a Tile to edit.
 * @returns void
 */
 void editMap(Camera* camera, SDL_Event event) {
@@ -107,10 +106,10 @@ void editMap(Camera* camera, SDL_Event event) {
 }
 /*
 * @brief The main loop needed for rendering, keypress checking and things that need constant update (like timestamps, timers etc.)
-* @params renderer The main renderer used for the game
-* @params player The player's data in Character typedef form
-* @params grassTexture In this version, the texture handling and loading is not yet present, therefore we just pass down this Texture for further use
-* @params camera The camera used for tracking the player
+* @param renderer The main renderer used for the game
+* @param player The player's data in Character typedef form
+* @param grassTexture In this version, the texture handling and loading is not yet present, therefore we just pass down this Texture for further use
+* @param camera The camera used for tracking the player
 * @returns void
 */
 void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera) {

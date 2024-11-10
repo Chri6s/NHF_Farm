@@ -4,6 +4,14 @@
 #include <SDL.h>
 #include <stdio.h>
 
+/**
+ * @brief Handles Keyboard inputs
+ * @param player The player that data needs to be changed on input
+ * @param keystate The key the user presses
+ * @param deltaTime The deltaTime constant, used for calculating speed so it's not affected by FPS
+ * @param event the main event gets emitted on input
+ * @returns void
+ */
 void handleKeyboardInput(Character* player, const Uint8* keystate, float deltaTime, SDL_Event event) {
 	float speed = 394.5f;
 	int gkeypressed = 0;
@@ -20,7 +28,13 @@ void handleKeyboardInput(Character* player, const Uint8* keystate, float deltaTi
 		gkeypressed = 0;
 	}
 } 
-
+/**
+ * @brief Moves the character. Also handles boundary checking
+ * @param player The Player that needs it's data to be changed
+ * @param deltaX How much the player needs to be moved on the X axis
+ * @param deltaY How much the player needs to be moved on the Y axis
+ * @returns void
+ */
 void moveCharacter(Character* player, float deltaX, float deltaY) {
 	player->x += deltaX;
 	player->y += deltaY;
@@ -34,6 +48,11 @@ void moveCharacter(Character* player, float deltaX, float deltaY) {
 		player->y = (MAP_HEIGHT * TILE_SIZE * SCALINGFACTOR ) - player->height;
 
 }
+/**
+ * @brief Initializes the player's starting values
+ * @param player The player that needs initialization
+ * @returns void
+ */
 void initPlayer(Character* player) {
 	player->x = (MAP_WIDTH * TILE_SIZE * SCALINGFACTOR) / 2;
 	player->y = (MAP_HEIGHT * TILE_SIZE * SCALINGFACTOR) / 2;

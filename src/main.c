@@ -14,10 +14,10 @@ typedef struct {
 } Dropdown;
 
 TTF_Font* font = NULL;
-/*
+/**
 * @brief Draws a dropdown menu with its data defined in a Dropdown struct
-* @params renderer The renderer that needs to handle the rendering of the Dropdown menu
-* @params dropdown The data the menu needs to draw, selectable options, the number of options, the option that was selected etc.
+* @param renderer The renderer that needs to handle the rendering of the Dropdown menu
+* @param dropdown The data the menu needs to draw, selectable options, the number of options, the option that was selected etc.
 * @returns void
 */
 void drawDropdown(SDL_Renderer* renderer, Dropdown* dropdown) {
@@ -51,10 +51,10 @@ void drawDropdown(SDL_Renderer* renderer, Dropdown* dropdown) {
         }
     }
 }
-/*
+/**
 * @brief Handles the events done on the dropdown menu
-* @params event The event that got emitted
-* @params dropdown The dropdown menu that has been affected.
+* @param event The event that got emitted
+* @param dropdown The dropdown menu that has been affected.
 * @returns void
 */
 void handleDropdownEvent(SDL_Event* event, Dropdown* dropdown) {
@@ -80,13 +80,12 @@ void handleDropdownEvent(SDL_Event* event, Dropdown* dropdown) {
 }
 extern GameSettings settings = { 60, 800, 600 };
 
-/*
-* @brief The main function that gets called on running the .exe file.
-* @desc This function right now, handles the startup, the settings menu before launching the game. This will be moved to another file, to make it more readable. 
+/**
+* @brief The main function that gets called on running the .exe file. This function right now, handles the startup, the settings menu before launching the game. This will be moved to another file, to make it more readable. 
 * The functionality is basically: 1. creates the setting menu 2. handles everything in the handling menu until its closed or the user presses start 3. starts the GameInit function.
-* 
+* @returns void
 */
-int main(int argc, char* argv[]) {
+void main(int argc, char* argv[]) {
     SetConsoleTitle(L"FarmR Debug");
     
     SDL_Init(SDL_INIT_VIDEO);
@@ -165,5 +164,4 @@ int main(int argc, char* argv[]) {
     SDL_DestroyWindow(window);
     SDL_Quit();
     GameInit();
-    return 0;
 }
