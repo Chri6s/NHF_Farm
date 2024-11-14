@@ -42,4 +42,6 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild NHF1_Farm.sln /p:Configuration=Release
+      run: |
+          "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\Tools\VsDevCmd.bat"
+          msbuild your_project.sln /p:Configuration=Release /p:Platform=x64 /p:IncludePath="D:\a\NHF_Farm\NHF_Farm\lib\SDL2\include" /p:LibraryPath="D:\a\NHF_Farm\NHF_Farm\lib\SDL2\lib"e
