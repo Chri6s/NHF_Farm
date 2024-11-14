@@ -14,6 +14,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
+#include "saveManager.h"
+
 SDL_Window* gameWindow = NULL;
 SDL_Renderer* gameRenderer = NULL;
 SDL_Texture* gameTexture = NULL;
@@ -39,19 +41,6 @@ void GameInit() {
 	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_Texture* grass = loadTexture("../assets/grass.png", gameRenderer);
 	SDL_Texture* characterTexture = loadTexture("../assets/character.png", gameRenderer);
-	for (int x = 0; x < MAP_WIDTH; x++) {
-		for (int y = 0; y < MAP_HEIGHT; y++) {
-			int rotation = (rand() % 3) * 90;
-			Block block = {
-				x,
-				y,
-				0,
-				rotation,
-				NULL
-			};
-			map.blocks[x][y] = block;
-		}
-	}
 	SDL_Surface* iconSurface = IMG_Load("../assets/icon.png");
 	SDL_SetWindowIcon(gameWindow, iconSurface);
 	SDL_FreeSurface(iconSurface);
@@ -59,6 +48,14 @@ void GameInit() {
 	initPlayer(player);
 	Camera camera = { player->x - (settings.screen_x / 2),player->y - (settings.screen_y / 2), settings.screen_x, settings.screen_y};
 	player->texture = characterTexture;
+	if(checkForSavesFolder() == 0) {
+		if(system("mkdir -p ../saves") == 0) {
+			return 1;
+		} else {
+			return -1;
+		}
+		return 0;
+	}
 	gameLoop(gameRenderer, player, grass, &camera);
 
 	//shutdown

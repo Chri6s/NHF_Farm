@@ -27,5 +27,10 @@ typedef struct {
 typedef struct {
 	int screen_x, screen_y, target_fps;
 } GameSettings;
+
+typedef struct {
+	char saveName[50];
+	char LastPlayed[12]
+} Save;
 // define here, to access everywhere
 Map map; // The main map which stores every block and its data.
