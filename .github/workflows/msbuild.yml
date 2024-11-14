@@ -28,6 +28,10 @@ jobs:
       run: .\install.bat
       shell: cmd
       working-directory: ${{ github.workspace }}
+    - name: Debug SDL2 install
+      run: dir lib\SDL2\include
+      shell: cmd
+
 
   build:
     runs-on: windows-latest
@@ -37,7 +41,11 @@ jobs:
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
-      
+    - name: Set up SDL paths
+      run: |
+          setx INCLUDE "%cd%\lib\SDL2\include;%INCLUDE%"
+          setx LIB "%cd%\lib\SDL2\lib;%LIB%"
+      shell: cmd
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
