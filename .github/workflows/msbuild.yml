@@ -28,9 +28,6 @@ jobs:
       run: .\install.bat
       shell: cmd
       working-directory: ${{ github.workspace }}
-    - name: Debug SDL2 install
-      run: dir lib\SDL2\include
-      shell: cmd
 
 
   build:
@@ -52,4 +49,4 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: |
           "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\Tools\VsDevCmd.bat"
-          msbuild NHF1_Farm.sln /p:Configuration=Release /p:Platform=x64 /p:IncludePath="D:\a\NHF_Farm\NHF_Farm\lib\SDL2\include" /p:LibraryPath="D:\a\NHF_Farm\NHF_Farm\lib\SDL2\lib"e
+          msbuild NHF1_Farm.sln /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="D:\a\NHF_Farm\NHF_Farm\lib\SDL2\include" /p:LibraryPath="D:\a\NHF_Farm\NHF_Farm\lib\SDL2\lib"e
