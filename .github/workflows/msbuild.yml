@@ -25,8 +25,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install Prerequisites
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: install.bat
+      run: .\install.bat
+      shell: cmd
+      working-directory: ${{ github.workspace }}
 
   build:
     runs-on: windows-latest
