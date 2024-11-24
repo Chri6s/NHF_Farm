@@ -10,12 +10,14 @@
 #include "render.h"
 #include "character.h"
 #include "main.h"
+#include "saveManager.h"
+#include "map.h"
+#include "mainMenu.h"
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
-#include "saveManager.h"
-
+#include <SDL_ttf.h>
 SDL_Window* gameWindow = NULL;
 SDL_Renderer* gameRenderer = NULL;
 SDL_Texture* gameTexture = NULL;
@@ -30,7 +32,7 @@ int editMode = 1;
 * @brief The main Initalization function for the game.
 * @returns void
 */
-void GameInit() {
+int GameInit() {
 
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
 		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
@@ -39,6 +41,7 @@ void GameInit() {
 
 	gameWindow = initWindow("FarmR", settings.screen_x, settings.screen_y);
 	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	MainMenu(gameRenderer);
 	SDL_Texture* grass = loadTexture("../assets/grass.png", gameRenderer);
 	SDL_Texture* characterTexture = loadTexture("../assets/character.png", gameRenderer);
 	SDL_Surface* iconSurface = IMG_Load("../assets/icon.png");
@@ -46,7 +49,8 @@ void GameInit() {
 	SDL_FreeSurface(iconSurface);
 	Character* player = (Character*)malloc(sizeof(Character));
 	initPlayer(player);
-	Camera camera = { player->x - (settings.screen_x / 2),player->y - (settings.screen_y / 2), settings.screen_x, settings.screen_y};
+	initializeMap();
+	Camera camera = { (MAP_WIDTH / 2) * TILE_SIZE, (MAP_HEIGHT / 2) * TILE_SIZE, settings.screen_x, settings.screen_y};
 	player->texture = characterTexture;
 	if(checkForSavesFolder() == 0) {
 		if(system("mkdir -p ../saves") == 0) {
@@ -65,6 +69,7 @@ void GameInit() {
 	SDL_DestroyWindow(gameWindow);
 	IMG_Quit();
 	SDL_Quit();
+	return 0;
 }
 /**
 * @brief Edits the Tile at the coordinate
@@ -75,9 +80,9 @@ void GameInit() {
 void editTile(int tileX, int tileY) {
 	if (tileX >= 0 && tileY >= 0 && tileX < MAP_WIDTH && tileY < MAP_HEIGHT) {
 		// Check if tile is already farmland; if not, change it
-		if (map.blocks[tileX][tileY].id != 1) {
+		if (map->blocks[tileX][tileY].id != 1) {
 			printf("edited!");
-			map.blocks[tileX][tileY].id = 1;
+			map->blocks[tileX][tileY].id = 1;
 		}
 	}
 }
@@ -90,8 +95,8 @@ void editTile(int tileX, int tileY) {
 void editMap(Camera* camera, SDL_Event event) {
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
-	int selectedTileX = (mouseX / SCALINGFACTOR + camera->x) / TILE_WIDTH;
-	int selectedTileY = (mouseY / SCALINGFACTOR + camera->y) / TILE_HEIGHT;
+	int selectedTileX = ((mouseX ) + (camera->x )) / (TILE_WIDTH * SCALINGFACTOR);
+	int selectedTileY = ((mouseY ) + (camera->y )) / (TILE_HEIGHT * SCALINGFACTOR);
 	printf("%d ", selectedTileX);
 	printf("%d\n", selectedTileY);
 	renderTileOutline(gameRenderer, selectedTileX, selectedTileY);
@@ -114,13 +119,27 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 	SDL_Texture* otherTexture = loadTexture("../assets/farmland1.png", renderer);
 	int quit = 0;
+	int offsetX;
+	int offsetY;
+	int tileX;
+	int tileY;
 	while (quit == 0) {
 		frameStart = SDL_GetTicks();
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				quit = 1;
 			}
+			else if (event.type == SDL_WINDOWEVENT) {
+				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+					settings.screen_x = event.window.data1;
+					settings.screen_x = event.window.data2;
+					camera->height = settings.screen_y;
+					camera->width = settings.screen_x;
+
+				}
+			}
 		}
+
 
 		handleKeyboardInput(player, keystate, deltaTime, event);
 		SDL_RenderClear(renderer);

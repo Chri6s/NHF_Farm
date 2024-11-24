@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include "vigenere.h"
 
 #define A 65
 #define TABLE_WIDTH 26
 
 char table[TABLE_WIDTH][TABLE_WIDTH];
-
 
 int initTable()
 {
@@ -19,8 +19,8 @@ int initTable()
 	return 1;
 }
 
-int vi_encrypt(char* key, char* src, char* dest)
-{
+char* vi_encrypt(char* key, char* src) {
+	static char dest[10000];
 	char *pSrc = src;
 	char *pKey = key;
 	char *pDest = dest;
@@ -37,11 +37,12 @@ int vi_encrypt(char* key, char* src, char* dest)
 	} while (*pSrc++);
 
 	dest[strlen(src)] = 0;
-	return 1;
+	return dest;
 }
 
-int vi_decrypt(char* key, char* src, char* dest)
-{	char *pSrc = src;
+char* vi_decrypt(char* key, char* src) {
+	static char dest[10000];
+	char *pSrc = src;
 	char *pKey = key;
 	char *pDest = dest;
 	char offset;
@@ -56,23 +57,27 @@ int vi_decrypt(char* key, char* src, char* dest)
 	} while (*pSrc++);
 
 	dest[strlen(src)] = 0;
-	return 1;
+	return dest;
 }
 
-// int main()
-// {
-// 	char secret[6] = "FarmR";
-// 	char text[10000] = "hgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfkahgaksgdfjkhgsdafkegakjgsdfkjegakjgdfjkahgfkjeagkzudsgfkehabkjabsvkahsdbvkajbhsdvkajsgfiwuazgrihasdbkajsdhbfkaezgfka";
-// 	char ciphertext[256];
-// 	char output[10000];
+/*
+* sample code for usage
+* 
+int main()
+{
+	char secret[6] = "FarmR";
+	char text[10000] = "HiImencrypted";
+	char* ciphertext;
+	char* output;
 
-// 	initTable();
+	initTable();
 
-// 	encrypt(secret, text, ciphertext);
-// 	printf("out: [%s]\n", ciphertext);
+	ciphertext = vi_encrypt(secret, text);
+	printf("out: [%s]\n", ciphertext);
 
-// 	decrypt(secret, ciphertext, output);
-// 	printf("input was: [%s]\n", output);
+	output = vi_decrypt(secret, ciphertext);
+	printf("input was: [%s]\n", output);
 
-// 	return 0;
-// }
+	return 0;
+}
+*/

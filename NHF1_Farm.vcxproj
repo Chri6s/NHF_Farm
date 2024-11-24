@@ -110,6 +110,9 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include; $(ProjectDir)lib\SDL2_image\include; $(ProjectDir)lib\SDL2_ttf\include </AdditionalIncludeDirectories>
       <SuppressStartupBanner>false</SuppressStartupBanner>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <CompileAs>CompileAsC</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,38 +130,50 @@ xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-<ClCompile>
-  <WarningLevel>Level3</WarningLevel>
-  <FunctionLevelLinking>true</FunctionLevelLinking>
-  <IntrinsicFunctions>true</IntrinsicFunctions>
-  <SDLCheck>true</SDLCheck>
-  <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-  <ConformanceMode>true</ConformanceMode>
-  <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include; $(ProjectDir)lib\SDL2_image\include; $(ProjectDir)lib\SDL2_ttf\include </AdditionalIncludeDirectories>
-</ClCompile>
-<Link>
-  <SubSystem>Console</SubSystem>
-  <EnableCOMDATFolding>true</EnableCOMDATFolding>
-  <OptimizeReferences>true</OptimizeReferences>
-  <GenerateDebugInformation>true</GenerateDebugInformation>
-  <AdditionalLibraryDirectories>$(ProjectDir)lib\SDL2\lib\x64\;$(ProjectDir)lib\SDL2_image\lib\x64\; $(ProjectDir)lib\SDL2_ttf\lib\x64\</AdditionalLibraryDirectories>
-  <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies);SDL2_image.lib; SDL2_ttf.lib</AdditionalDependencies>
-</Link>
-
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include; $(ProjectDir)lib\SDL2_image\include; $(ProjectDir)lib\SDL2_ttf\include </AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)lib\SDL2\lib\x64;$(ProjectDir)lib\SDL2_image\lib\x64; $(ProjectDir)lib\SDL2_ttf\lib\x64;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\character.c" />
+    <ClCompile Include="src\crypto\base64.c" />
+    <ClCompile Include="src\crypto\vigenere.c" />
     <ClCompile Include="src\game.c" />
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\mainMenu.c" />
+    <ClCompile Include="src\map.c" />
     <ClCompile Include="src\render.c" />
     <ClCompile Include="src\saveManager.c" />
+    <ClCompile Include="src\settingsMenu.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h" />
+    <ClInclude Include="src\crypto\base64.h" />
+    <ClInclude Include="src\crypto\vigenere.h" />
+    <ClInclude Include="src\debugmalloc.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\mainMenu.h" />
+    <ClInclude Include="src\map.h" />
     <ClInclude Include="src\render.h" />
+    <ClInclude Include="src\saveManager.h" />
+    <ClInclude Include="src\settingsMenu.h" />
     <ClInclude Include="src\structures.h" />
   </ItemGroup>
   <ItemGroup>

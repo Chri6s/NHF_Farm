@@ -9,15 +9,18 @@ typedef struct {
 } Block;
 
 typedef struct {
-    float x, y;
+	Block blocks[MAP_WIDTH][MAP_HEIGHT];
+	char name[50]; // map name is same as save name
+} Map;
+
+typedef struct {
+	int x, y;
+	int xSpeed, ySpeed;
+	float speed;
+	int editMode;
     int width, height;
     SDL_Texture* texture;
 } Character;
-
-typedef struct {
-	Block blocks[MAP_WIDTH][MAP_HEIGHT];
-	char name[];
-} Map;
 
 typedef struct {
 	float x, y;
@@ -30,7 +33,14 @@ typedef struct {
 
 typedef struct {
 	char saveName[50];
-	char LastPlayed[12]
+	char LastPlayed[12];
+	Map *mapdata;
 } Save;
-// define here, to access everywhere
-Map map; // The main map which stores every block and its data.
+
+typedef struct {
+	const char** options;
+	int optionCount;
+	int selectedOption;
+	SDL_Rect box;
+	SDL_bool open;
+} Dropdown;
