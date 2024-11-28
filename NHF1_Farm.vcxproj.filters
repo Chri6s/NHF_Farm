@@ -45,6 +45,9 @@
     <ClCompile Include="src\mainMenu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\item.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\debugmalloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

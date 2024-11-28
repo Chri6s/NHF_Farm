@@ -9,6 +9,36 @@ typedef struct {
 } Block;
 
 typedef struct {
+	char* name;
+	SDL_Rect box;
+} Button;
+
+typedef struct {
+	char* name;
+	SDL_Rect box;
+} SaveFile;
+
+typedef struct {
+	char name[20];
+	int id;
+	int srcX, srcY, srcW, srcH;
+	int quantity;
+	int slot;
+	SDL_Texture* texture;
+} Item;
+
+typedef struct {
+	SDL_Rect slot;
+	Item* item;
+} HotbarSlot;
+
+typedef struct {
+	HotbarSlot items[HOTBAR_SIZE];
+	int selectedSlot;
+	int x, y, w, h;
+} Hotbar;
+
+typedef struct {
 	Block blocks[MAP_WIDTH][MAP_HEIGHT];
 	char name[50]; // map name is same as save name
 } Map;
@@ -18,9 +48,12 @@ typedef struct {
 	int xSpeed, ySpeed;
 	float speed;
 	int editMode;
-    int width, height;
-    SDL_Texture* texture;
+	int width, height;
+	HotbarSlot selectedItem;
+	Hotbar hotbar;
+	SDL_Texture* texture;
 } Character;
+
 
 typedef struct {
 	float x, y;

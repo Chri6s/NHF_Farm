@@ -79,7 +79,7 @@ void createSettingsMenu() {
 	TTF_Init();
 	font = TTF_OpenFont("../assets/fonts/Arial.ttf", 16);
 
-	SDL_Window* window = SDL_CreateWindow("Game Settings",
+	SDL_Window* window = SDL_CreateWindow("FarmR Settings",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		800, 600,
@@ -89,10 +89,11 @@ void createSettingsMenu() {
 	const char* fpsOptions[] = { "30", "60", "120" };
 	const char* widthOptions[] = { "800", "1024", "1280", "1920" };
 	const char* heightOptions[] = { "600", "768", "720", "1080" };
+	const char* resolutionOptions[] = { "800x600", "1024x768", "1280x720", "1920x1080" };
 
+	
 	Dropdown fpsDropdown = { fpsOptions, 3, 1, { 100, 50, 100, 30 }, SDL_FALSE };
-	Dropdown widthDropdown = { widthOptions, 4, 1, { 300, 50, 100, 30 }, SDL_FALSE };
-	Dropdown heightDropdown = { heightOptions, 4, 1, { 500, 50, 100, 30 }, SDL_FALSE };
+	Dropdown resolutionDropdown = { resolutionOptions, 4, 1, { 500, 50, 100, 30 }, SDL_FALSE };
 	SDL_Rect startButton = { 600, 500, 100, 40 };
 
 	SDL_bool running = SDL_TRUE;

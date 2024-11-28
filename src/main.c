@@ -3,6 +3,7 @@
 #include "game.h"
 #include "render.h"
 #include "settingsMenu.h"
+#include "debugmalloc.h"
 
 
 

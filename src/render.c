@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include "debugmalloc.h"
+#include "settingsMenu.h"
 /**
 * @brief This function is the main logic of the Camera, used for checking if the camera's edges hit the bounds.
 * @param camera The camera that needs this logic
@@ -20,9 +22,6 @@ void updateCamera(Camera* camera, Character* player) {
 	camera->x = player->x + (player->width / 2) - (camera->width / 2);
 	camera->y = player->y + (player->height / 2) - (camera->height / 2);
 
-	//// Align camera position to tile grid
-	//camera->x = ((float)camera->x / (TILE_SIZE * SCALINGFACTOR)) * (TILE_SIZE * SCALINGFACTOR);
-	//camera->y = ((float)camera->y / (TILE_SIZE * SCALINGFACTOR)) * (TILE_SIZE * SCALINGFACTOR);
 	if (camera->x < 0) camera->x = 0;
 	if (camera->y < 0) camera->y = 0;
 
@@ -106,22 +105,22 @@ void renderCharacter(SDL_Renderer* renderer, Character* player, Camera* camera) 
 */
 void renderTileOutline(SDL_Renderer* renderer, int selectedTileX, int selectedTileY, Camera* camera) {
 	if (selectedTileX >= 0 && selectedTileY >= 0) {
-		SDL_FRect outlineRect = {
-			selectedTileX * TILE_SIZE - camera->x,
-			selectedTileY * TILE_SIZE - camera->y,
+		SDL_Rect outlineRect = {
+			(selectedTileX * TILE_SIZE) - camera->x,
+			(selectedTileY * TILE_SIZE) - camera->y,
 			TILE_SIZE,
 			TILE_SIZE
 		};
 		SDL_SetRenderDrawColor(renderer, 204, 204, 204, 255);
-		SDL_RenderDrawRectF(renderer, &outlineRect);
+		SDL_RenderDrawRect(renderer, &outlineRect);
 		for (int i = 0; i < 3; ++i) {  // Adjust the loop count to make it thicker
-			SDL_FRect outlineRect = {
+			SDL_Rect outlineRect = {
 				(selectedTileX * TILE_SIZE - camera->x) + i,        // Shift right by i pixels
 				(selectedTileY * TILE_SIZE - camera->y) + i,        // Shift down by i pixels
 				TILE_SIZE - 2 * i, // Decrease width by 2*i to keep centered
 				TILE_SIZE - 2 * i // Decrease height by 2*i to keep centered
 			};
-			SDL_RenderDrawRectF(renderer, &outlineRect);
+			SDL_RenderDrawRect(renderer, &outlineRect);
 		}
 
 	}
@@ -184,4 +183,7 @@ SDL_Window* initWindow(const char* windowName, int width, int height) {
 	}
 
 	return window;
+}
+void renderButton(SDL_Renderer* renderer, SDL_Texture* texture, Button button) {
+	SDL_RenderCopy(renderer, texture, NULL, &button.box);
 }

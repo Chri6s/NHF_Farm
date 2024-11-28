@@ -2,5 +2,5 @@
 void LoadFromFile();
 void createNewSave();
 void overwriteSave();
-void saveGame(Save save);
+void saveGame(Save* save);
 void generateSave();

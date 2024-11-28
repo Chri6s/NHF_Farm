@@ -74,6 +74,9 @@
     <IncludePath>$(ProjectDir)lib\SDL2_image\include;$(IncludePath); $(ProjectDir)lib\SDL2_ttf\include;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64); $(ProjectDir)lib\SDL2_image\lib\x64; $(ProjectDir)lib\SDL2_ttf\lib\x64 </LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)\build\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -154,6 +157,7 @@ xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\
     <ClCompile Include="src\crypto\base64.c" />
     <ClCompile Include="src\crypto\vigenere.c" />
     <ClCompile Include="src\game.c" />
+    <ClCompile Include="src\item.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\mainMenu.c" />
     <ClCompile Include="src\map.c" />
@@ -168,6 +172,7 @@ xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\
     <ClInclude Include="src\debugmalloc.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\item.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\mainMenu.h" />
     <ClInclude Include="src\map.h" />
