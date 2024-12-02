@@ -129,7 +129,9 @@
     <PostBuildEvent>
       <Command>xcopy /Y "$(SolutionDir)lib\SDL2\lib\x64\SDL2.dll" "$(SolutionDir)build\"
 xcopy /Y "$(SolutionDir)lib\SDL2_image\lib\x64\SDL2_image.dll" "$(SolutionDir)build\"
-xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\"</Command>
+xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\"
+xcopy /E /I /Y "$(SolutionDir)assets" "$(SolutionDir)build\assets"
+	</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,6 +153,12 @@ xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\
       <AdditionalLibraryDirectories>$(ProjectDir)lib\SDL2\lib\x64;$(ProjectDir)lib\SDL2_image\lib\x64; $(ProjectDir)lib\SDL2_ttf\lib\x64;</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y "$(SolutionDir)lib\SDL2\lib\x64\SDL2.dll" "$(SolutionDir)build\"
+xcopy /Y "$(SolutionDir)lib\SDL2_image\lib\x64\SDL2_image.dll" "$(SolutionDir)build\"
+xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\"
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\character.c" />

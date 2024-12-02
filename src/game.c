@@ -50,13 +50,13 @@ int GameInit() {
 	SDL_SetWindowIcon(gameWindow, iconSurface);
 	SDL_FreeSurface(iconSurface);
 
-	Character* player = NULL;
+	Character* player = (Character*)malloc(sizeof(Character));
 	initPlayer(player);
 
 	Save* save = (Save*)malloc(sizeof(Save));
 	Camera camera = { (MAP_WIDTH / 2) * TILE_SIZE, (MAP_HEIGHT / 2) * TILE_SIZE, settings.screen_x, settings.screen_y };;
 	player->texture = characterTexture;
-	
+
 	initializeMap("NewGame");
 	if(checkForSavesFolder() == 0) {
 		if(system("mkdir -p ./saves") == 0) {
@@ -87,12 +87,9 @@ int GameInit() {
 * @returns void
 */
 void editTile(int tileX, int tileY, int replaceId) {
-	printf("EDITING TILE\n");
 	if (tileX >= 0 && tileY >= 0 && tileX < MAP_WIDTH && tileY < MAP_HEIGHT) {
 		// Check if tile is already farmland; if not, change it
 		if (map->blocks[tileX][tileY].id != 1 && replaceId == 1) {
-			printf("%d, %d\n", tileX, tileY);
-			printf("edited!");
 			map->blocks[tileX][tileY].id = 1;
 		}
 		else if (map->blocks[tileX][tileY].id != 0 && replaceId == 0) {
@@ -121,6 +118,7 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				quit = 1;
+				return NULL;
 			}
 			else if (event.type == SDL_WINDOWEVENT) {
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {

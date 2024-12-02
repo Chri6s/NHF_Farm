@@ -22,7 +22,7 @@ typedef struct SaveList {
 } SaveList;
 
 int checkForSavesFolder() {
-    return access("../saves", F_OK) != -1 ? 1 : 0;
+    return access("./saves", F_OK) != -1 ? 1 : 0;
 }
 
 void createNewSave() {

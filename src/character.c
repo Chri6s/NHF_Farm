@@ -15,18 +15,24 @@
 void handleKeyboardInput(Character* player, const Uint8* keystate, float deltaTime, SDL_Event event) {
 	player->xSpeed = 0;
 	player->ySpeed = 0;
-	int gkeypressed = 0;
+	int gpressed = 0;
 	if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) player->ySpeed = -player->speed;
 	if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN])  player->ySpeed = player->speed;
 	if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) player->xSpeed = -player->speed;
 	if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) player->xSpeed = player->speed;
-	if (keystate[SDL_SCANCODE_G] && !player->editMode && event.type == SDL_KEYDOWN && !gkeypressed) { 
-		editMode = 1;
-		gkeypressed = 1;
-		printf("editMode enabled\n");
+	if (event.type == SDL_KEYDOWN && keystate[SDL_SCANCODE_G] && !gpressed && !player->editMode) {
+		gpressed = 1;
+		player->editMode = 1;
+		printf("Edit mode: %d\n", player->editMode);
 	}
-	if (event.type == SDL_KEYUP && keystate[SDL_SCANCODE_G]) {
-		gkeypressed = 0;
+	else if (event.type == SDL_KEYDOWN && keystate[SDL_SCANCODE_G] && player->editMode && !gpressed) {
+		gpressed = 1;
+		player->editMode = 0;
+		printf("Edit mode: %d\n", player->editMode);
+	}
+
+	if (event.type == SDL_KEYUP) {
+		if (keystate[SDL_SCANCODE_G]) gpressed = 0;
 	}
 } 
 /**
@@ -127,7 +133,6 @@ void freeHotbar(Hotbar* hotbar) {
  * @returns void
  */
 void initPlayer(Character* player) {
-	player = (Character*)malloc(sizeof(Character));
 	player->x = (MAP_WIDTH / 2);
 	player->y = (MAP_HEIGHT / 2);
 	player->xSpeed = 0;

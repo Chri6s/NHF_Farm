@@ -14,13 +14,14 @@ void initializeMap(const char* name) {
     // Set map name
     strncpy(map->name, name, sizeof(map->name) - 1);
     map->name[sizeof(map->name) - 1] = '\0';  // Ensure null termination
-
     // Initialize all blocks to default values
     for (int x = 0; x < MAP_WIDTH; x++) {
         for (int y = 0; y < MAP_HEIGHT; y++) {
+            int rotation = (rand() % 3) * 90;
             map->blocks[x][y].id = 0;
             map->blocks[x][y].x = x;
             map->blocks[x][y].y = y;
+			map->blocks[x][y].rotation = rotation;
             map->blocks[x][y].planatable = 0;
         }
     }
@@ -87,7 +88,6 @@ void saveMap(const char* filename) {
 
 void unloadMap(Map* map) {
     if (map != NULL) {
-        printf("Freeing map at address %p\n", (void*)map);
         free(map);
         map = NULL;
     }
