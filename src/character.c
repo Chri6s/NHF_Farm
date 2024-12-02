@@ -127,6 +127,7 @@ void freeHotbar(Hotbar* hotbar) {
  * @returns void
  */
 void initPlayer(Character* player) {
+	player = (Character*)malloc(sizeof(Character));
 	player->x = (MAP_WIDTH / 2);
 	player->y = (MAP_HEIGHT / 2);
 	player->xSpeed = 0;

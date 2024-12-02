@@ -9,7 +9,6 @@
 #include "structures.h"
 #include "main.h"
 #include "render.h"
-#include "map.h"
 #include <windows.h>
 #include <commdlg.h>
 
@@ -17,7 +16,7 @@
 // Utility function prototypes
 void getExecutableDirectory(char* buffer, size_t size);
 void renderButton(SDL_Renderer* renderer, SDL_Texture* texture, Button button);
-void MainMenu(SDL_Renderer* renderer);
+int MainMenu(SDL_Renderer* renderer);
 
 // Utility implementations
 void getExecutableDirectory(char* buffer, size_t size) {
@@ -65,7 +64,7 @@ void openFileAndLoad() {
     }
 }
 
-void MainMenu(SDL_Renderer* renderer) {
+int MainMenu(SDL_Renderer* renderer) {
     SDL_Texture* background = loadTexture("../assets/mainMenu/mainMenu.png", renderer);
     SDL_Texture* newGameButton = loadTexture("../assets/mainMenu/NewGame.png", renderer);
     SDL_Texture* loadGameButton = loadTexture("../assets/mainMenu/loadGame.png", renderer);
@@ -92,6 +91,7 @@ void MainMenu(SDL_Renderer* renderer) {
             switch (event.type) {
             case SDL_QUIT:
                 running = SDL_FALSE;
+                return 0;
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
@@ -132,14 +132,17 @@ void MainMenu(SDL_Renderer* renderer) {
 
             if (newGameClicked) {
                 running = SDL_FALSE;
+                return 1;
             }
             if (loadGameClicked) {
-                openFileAndLoad();
+                openFileAndLoad(); //ide majd a SavesMenu methodusa kell.
                 printf("Enter Saves menu");
+                return 1;
             }
             if (exitClicked) {
                 printf("Exit game");
                 running = SDL_FALSE;
+                return 0;
             }
             SDL_RenderPresent(renderer);
         }
@@ -148,7 +151,6 @@ void MainMenu(SDL_Renderer* renderer) {
     SDL_DestroyTexture(newGameButton);
     SDL_DestroyTexture(loadGameButton);
     SDL_DestroyTexture(exitButton);
-
-    return NULL;
+    return 2;
 }
 

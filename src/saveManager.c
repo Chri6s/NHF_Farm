@@ -26,7 +26,7 @@ int checkForSavesFolder() {
 }
 
 void createNewSave() {
-    initializeMap();
+    initializeMap("NewGame");
     Save* currentSave = (Save*)malloc(sizeof(Save));
     if (currentSave == NULL) {
         printf("Memory allocation failed!\n");

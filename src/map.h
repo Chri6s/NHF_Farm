@@ -8,10 +8,10 @@
 
 extern Map* map;
 
-void initializeMap();
+void initializeMap(const char* name);
 
 void loadMap(const char* filename);
 
-void unloadMap();
+void unloadMap(Map* map);
 
 #endif

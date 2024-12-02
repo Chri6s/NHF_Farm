@@ -13,7 +13,6 @@
 #include "saveManager.h"
 #include "map.h"
 #include "mainMenu.h"
-#include "debugmalloc.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -40,7 +39,9 @@ int GameInit() {
 
 	gameWindow = initWindow("FarmR", settings.screen_x, settings.screen_y);
 	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	MainMenu(gameRenderer);
+	if (MainMenu(gameRenderer) == 0) {
+		return 0;
+	}
 
 	SDL_Texture* grass = loadTexture("../assets/grass.png", gameRenderer);
 	SDL_Texture* characterTexture = loadTexture("../assets/character.png", gameRenderer);
@@ -49,16 +50,16 @@ int GameInit() {
 	SDL_SetWindowIcon(gameWindow, iconSurface);
 	SDL_FreeSurface(iconSurface);
 
-	Character* player = (Character*)malloc(sizeof(Character));
+	Character* player = NULL;
 	initPlayer(player);
 
 	Save* save = (Save*)malloc(sizeof(Save));
 	Camera camera = { (MAP_WIDTH / 2) * TILE_SIZE, (MAP_HEIGHT / 2) * TILE_SIZE, settings.screen_x, settings.screen_y };;
 	player->texture = characterTexture;
 	
-	initializeMap();
+	initializeMap("NewGame");
 	if(checkForSavesFolder() == 0) {
-		if(system("mkdir -p ../saves") == 0) {
+		if(system("mkdir -p ./saves") == 0) {
 			return 1;
 		} else {
 			return -1;
@@ -70,7 +71,7 @@ int GameInit() {
 	//shutdown
 	free(player);
 	free(save);
-	unloadMap();
+	unloadMap(map);
 	SDL_DestroyTexture(grass);
 	SDL_DestroyTexture(characterTexture);
 	SDL_DestroyRenderer(gameRenderer);

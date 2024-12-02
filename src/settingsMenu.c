@@ -96,7 +96,7 @@ void handleDropdownEvent(SDL_Event* event, Dropdown* dropdown) {
 	}
 }
 
-void createSettingsMenu() {
+int createSettingsMenu() {
 	SDL_Init(SDL_INIT_VIDEO);
 	TTF_Init();
 	font = TTF_OpenFont("../assets/fonts/Arial.ttf", 16);
@@ -122,14 +122,28 @@ void createSettingsMenu() {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
+				TTF_CloseFont(font);
+				SDL_DestroyRenderer(renderer);
+				SDL_DestroyWindow(window);
+				SDL_Quit();
+				settings.target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
+				getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings.screen_x, &settings.screen_y);
 				running = SDL_FALSE;
+				return 0;
 			}
 			if (event.type == SDL_MOUSEBUTTONDOWN) {
 				int x = event.button.x;
 				int y = event.button.y;
 				if (x >= startButton.x && x <= (startButton.x + startButton.w) &&
 					y >= startButton.y && y <= (startButton.y + startButton.h)) {
+					TTF_CloseFont(font);
+					SDL_DestroyRenderer(renderer);
+					SDL_DestroyWindow(window);
+					SDL_Quit();
+					settings.target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
+					getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings.screen_x, &settings.screen_y);
 					running = SDL_FALSE;
+					return 1;
 				}
 			}
 			handleDropdownEvent(&event, &fpsDropdown);
@@ -176,11 +190,6 @@ void createSettingsMenu() {
 			SDL_Delay(FRAME_DELAY - frameTime);
 		}
 	}
-	settings.target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
-	getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings.screen_x, &settings.screen_y);
 
-	TTF_CloseFont(font);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+	return 0;
 }

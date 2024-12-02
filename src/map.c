@@ -1,7 +1,8 @@
 #include "map.h"
 #include "debugmalloc.h"
+#include <stdio.h>
 
-Map * map;
+Map *map;
 
 void initializeMap(const char* name) {
     map = (Map*)malloc(sizeof(Map));
@@ -84,8 +85,9 @@ void saveMap(const char* filename) {
     printf("Map saved successfully as: %s\n", map->name);
 }
 
-void unloadMap() {
+void unloadMap(Map* map) {
     if (map != NULL) {
+        printf("Freeing map at address %p\n", (void*)map);
         free(map);
         map = NULL;
     }

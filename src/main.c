@@ -1,9 +1,8 @@
-#include <stdio.h>
+//#include <stdio.h>
 #include <windows.h>
 #include "game.h"
 #include "render.h"
 #include "settingsMenu.h"
-#include "debugmalloc.h"
 
 
 
@@ -16,7 +15,9 @@ extern GameSettings settings = { 60, 800, 600 };
 */
 int main(int argc, char* argv[]) {
     SetConsoleTitle(L"FarmR Debug");
-    createSettingsMenu();
+    if (createSettingsMenu() == 0) {
+        return 0;
+    } // mivel handle-öltük a 0-át (tehát teljesen ki akar lépni a user, így mindehogyan lefutatthatjuk a GameInit()-et.
     GameInit();
     return 1;
 }
