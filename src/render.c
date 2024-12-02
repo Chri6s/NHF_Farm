@@ -3,12 +3,9 @@
 #include "definitions.h"
 #include "structures.h"
 #include "map.h"
-#include <SDL.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 #include "debugmalloc.h"
 #include "settingsMenu.h"
 /**

@@ -1,4 +1,3 @@
-#include <SDL.h>
 #include "structures.h"
 #include <stdbool.h>
 void updatePlayerPos(Character* player);

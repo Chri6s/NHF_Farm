@@ -2,6 +2,8 @@
 
 #include "definitions.h"
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include <SDL_image.h>
 
 typedef struct {
 	int x, y, id, rotation;

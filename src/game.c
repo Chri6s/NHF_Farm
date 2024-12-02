@@ -15,10 +15,8 @@
 #include "mainMenu.h"
 #include "debugmalloc.h"
 #include <stdlib.h>
-#include <SDL.h>
-#include <SDL_image.h>
 #include <stdio.h>
-#include <SDL_ttf.h>
+
 SDL_Window* gameWindow = NULL;
 SDL_Renderer* gameRenderer = NULL;
 SDL_Texture* gameTexture = NULL;

@@ -2,10 +2,7 @@
 #include "structures.h"
 #include "game.h"
 #include "main.h"
-#include <SDL.h>
 #include <stdio.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 #include <stdbool.h>
 /**
  * @brief Handles Keyboard inputs

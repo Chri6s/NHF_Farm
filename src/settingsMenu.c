@@ -45,7 +45,29 @@ void drawDropdown(SDL_Renderer* renderer, Dropdown* dropdown) {
 	}
 }
 
+void getResolution(const char* resolution, int* width, int* height) {
+	char buffer[10]; // Assuming each part (width/height) won't exceed 10 characters
+	int i = 0, j = 0;
 
+	// Extract width
+	while (resolution[i] != 'x' && resolution[i] != '\0') {
+		buffer[j++] = resolution[i++];
+	}
+	buffer[j] = '\0'; // Null-terminate the string
+	*width = atoi(buffer); // Convert width to integer
+
+	if (resolution[i] == 'x') {
+		i++; // Skip the 'x'
+	}
+
+	// Extract height
+	j = 0;
+	while (resolution[i] != '\0') {
+		buffer[j++] = resolution[i++];
+	}
+	buffer[j] = '\0'; // Null-terminate the string
+	*height = atoi(buffer); // Convert height to integer
+}
 /**
 * @brief Handles the events done on the dropdown menu
 * @param event The event that got emitted
@@ -87,8 +109,6 @@ void createSettingsMenu() {
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	const char* fpsOptions[] = { "30", "60", "120" };
-	const char* widthOptions[] = { "800", "1024", "1280", "1920" };
-	const char* heightOptions[] = { "600", "768", "720", "1080" };
 	const char* resolutionOptions[] = { "800x600", "1024x768", "1280x720", "1920x1080" };
 
 	
@@ -113,22 +133,34 @@ void createSettingsMenu() {
 				}
 			}
 			handleDropdownEvent(&event, &fpsDropdown);
-			handleDropdownEvent(&event, &widthDropdown);
-			handleDropdownEvent(&event, &heightDropdown);
+			handleDropdownEvent(&event, &resolutionDropdown);
 
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
+		SDL_Color white = { 255, 255, 255, 255 };
+		SDL_Surface* maxFPSsurface= TTF_RenderText_Blended(font, "Max FPS:", white);
+		SDL_Texture* maxFPStexture = SDL_CreateTextureFromSurface(renderer, maxFPSsurface);
+		SDL_Rect maxFPSRect = { fpsDropdown.box.x, fpsDropdown.box.y - 20, maxFPSsurface->w, maxFPSsurface->h };
+		SDL_RenderCopy(renderer, maxFPStexture, NULL, &maxFPSRect);
+		SDL_FreeSurface(maxFPSsurface);
+		SDL_DestroyTexture(maxFPStexture);
+
+		SDL_Surface* ResolutionSurface = TTF_RenderText_Blended(font, "Resolution:", white);
+		SDL_Texture* ResolutionTexture = SDL_CreateTextureFromSurface(renderer, ResolutionSurface);
+		SDL_Rect resolutionRect = { resolutionDropdown.box.x, resolutionDropdown.box.y - 20, ResolutionSurface->w, ResolutionSurface->h };
+		SDL_RenderCopy(renderer, ResolutionTexture, NULL, &resolutionRect);
+		SDL_FreeSurface(ResolutionSurface);
+		SDL_DestroyTexture(ResolutionTexture);
+
 		drawDropdown(renderer, &fpsDropdown);
-		drawDropdown(renderer, &widthDropdown);
-		drawDropdown(renderer, &heightDropdown);
+		drawDropdown(renderer, &resolutionDropdown);
 
 		SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
 		SDL_RenderFillRect(renderer, &startButton);
 
-		SDL_Color white = { 255, 255, 255, 255 };
 		SDL_Surface* textSurface = TTF_RenderText_Blended(font, "Start", white);
 		SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 		SDL_Rect textRect = { startButton.x + 10, startButton.y + 10, textSurface->w, textSurface->h };
@@ -145,8 +177,8 @@ void createSettingsMenu() {
 		}
 	}
 	settings.target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
-	settings.screen_x = atoi(widthOptions[widthDropdown.selectedOption]);
-	settings.screen_y = atoi(heightOptions[heightDropdown.selectedOption]);
+	getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings.screen_x, &settings.screen_y);
+
 	TTF_CloseFont(font);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
