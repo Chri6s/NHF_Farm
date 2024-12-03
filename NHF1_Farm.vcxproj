@@ -169,6 +169,7 @@ xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\mainMenu.c" />
     <ClCompile Include="src\map.c" />
+    <ClCompile Include="src\pauseMenu.c" />
     <ClCompile Include="src\render.c" />
     <ClCompile Include="src\saveManager.c" />
     <ClCompile Include="src\settingsMenu.c" />
@@ -184,6 +185,7 @@ xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\mainMenu.h" />
     <ClInclude Include="src\map.h" />
+    <ClInclude Include="src\pauseMenu.h" />
     <ClInclude Include="src\render.h" />
     <ClInclude Include="src\saveManager.h" />
     <ClInclude Include="src\settingsMenu.h" />

@@ -5,22 +5,22 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
-typedef struct {
+typedef struct Block {
 	int x, y, id, rotation;
 	int planatable;
 } Block;
 
-typedef struct {
+typedef struct Button {
 	char* name;
 	SDL_Rect box;
 } Button;
 
-typedef struct {
+typedef struct SaveFile {
 	char* name;
 	SDL_Rect box;
 } SaveFile;
 
-typedef struct {
+typedef struct Item {
 	char name[20];
 	int id;
 	int srcX, srcY, srcW, srcH;
@@ -29,50 +29,51 @@ typedef struct {
 	SDL_Texture* texture;
 } Item;
 
-typedef struct {
+typedef struct HotbarSlot {
 	SDL_Rect slot;
 	Item* item;
 } HotbarSlot;
 
-typedef struct {
+typedef struct Hotbar {
 	HotbarSlot items[HOTBAR_SIZE];
 	int selectedSlot;
 	int x, y, w, h;
 } Hotbar;
 
-typedef struct {
+typedef struct Map {
 	Block blocks[MAP_WIDTH][MAP_HEIGHT];
 	char name[50]; // map name is same as save name
 } Map;
 
-typedef struct {
+typedef struct Character {
 	int x, y;
 	int xSpeed, ySpeed;
 	float speed;
 	int editMode;
 	int width, height;
+	int pauseMenuOpen;
 	HotbarSlot selectedItem;
 	Hotbar hotbar;
 	SDL_Texture* texture;
 } Character;
 
 
-typedef struct {
+typedef struct Camera{
 	float x, y;
 	int width, height;
 } Camera;
 
-typedef struct {
+typedef struct GameSettings{
 	int screen_x, screen_y, target_fps;
 } GameSettings;
 
-typedef struct {
+typedef struct Save {
 	char saveName[50];
 	char LastPlayed[12];
 	Map *mapdata;
 } Save;
 
-typedef struct {
+typedef struct Dropdown {
 	const char** options;
 	int optionCount;
 	int selectedOption;

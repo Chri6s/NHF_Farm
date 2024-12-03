@@ -65,17 +65,12 @@ void openFileAndLoad() {
 }
 
 int MainMenu(SDL_Renderer* renderer) {
-    SDL_Texture* background = loadTexture("../assets/mainMenu/mainMenu.png", renderer);
-    SDL_Texture* newGameButton = loadTexture("../assets/mainMenu/NewGame.png", renderer);
-    SDL_Texture* loadGameButton = loadTexture("../assets/mainMenu/loadGame.png", renderer);
-    SDL_Texture* exitButton = loadTexture("../assets/mainMenu/exitGame.png", renderer);
-    SDL_Texture* newGameButtonTexture = newGameButton;
-    SDL_Texture* loadGameButtonTexture = loadGameButton;
-    SDL_Texture* exitButtonTexture = exitButton;
+    SDL_Texture* background = loadTexture("assets/mainMenu/mainMenu.png", renderer);
+    SDL_Texture* newGameButtonTexture = loadTexture("assets/mainMenu/NewGame.png", renderer);
+    SDL_Texture* loadGameButtonTexture = loadTexture("assets/mainMenu/loadGame.png", renderer);
+    SDL_Texture* exitButtonTexture = loadTexture("assets/mainMenu/exitGame.png", renderer);
+
     SDL_RenderClear(renderer);
-    SDL_bool newGameHover = SDL_FALSE;
-    SDL_bool loadGameHover = SDL_FALSE;
-    SDL_bool exitHover = SDL_FALSE;
     SDL_bool newGameClicked = SDL_FALSE;
     SDL_bool loadGameClicked = SDL_FALSE;
     SDL_bool exitClicked = SDL_FALSE;
@@ -124,33 +119,33 @@ int MainMenu(SDL_Renderer* renderer) {
                 }
                 break;
             }
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, background, NULL, NULL);
-            renderButton(renderer, newGameButtonTexture, newGame);
-            renderButton(renderer, loadGameButtonTexture, loadGame);
-            renderButton(renderer, exitButtonTexture, exit);
-
-            if (newGameClicked) {
-                running = SDL_FALSE;
-                return 1;
-            }
-            if (loadGameClicked) {
-                openFileAndLoad(); //ide majd a SavesMenu methodusa kell.
-                printf("Enter Saves menu");
-                return 1;
-            }
-            if (exitClicked) {
-                printf("Exit game");
-                running = SDL_FALSE;
-                return 0;
-            }
-            SDL_RenderPresent(renderer);
         }
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, background, NULL, NULL);
+        renderButton(renderer, newGameButtonTexture, newGame);
+        renderButton(renderer, loadGameButtonTexture, loadGame);
+        renderButton(renderer, exitButtonTexture, exit);
+
+        if (newGameClicked) {
+            running = SDL_FALSE;
+            return 1;
+        }
+        if (loadGameClicked) {
+            openFileAndLoad(); //ide majd a SavesMenu methodusa kell.
+            printf("Enter Saves menu");
+            return 1;
+        }
+        if (exitClicked) {
+            printf("Exit game");
+            running = SDL_FALSE;
+            return 0;
+        }
+        SDL_RenderPresent(renderer);
     }
     SDL_DestroyTexture(background);
-    SDL_DestroyTexture(newGameButton);
-    SDL_DestroyTexture(loadGameButton);
-    SDL_DestroyTexture(exitButton);
+    SDL_DestroyTexture(newGameButtonTexture);
+    SDL_DestroyTexture(loadGameButtonTexture);
+    SDL_DestroyTexture(exitButtonTexture);
     return 2;
 }
 

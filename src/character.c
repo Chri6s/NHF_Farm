@@ -12,28 +12,35 @@
  * @param event the main event gets emitted on input
  * @returns void
  */
-void handleKeyboardInput(Character* player, const Uint8* keystate, float deltaTime, SDL_Event event) {
+void handleKeyboardInput(Character* player, const Uint8* keystate) {
 	player->xSpeed = 0;
 	player->ySpeed = 0;
-	int gpressed = 0;
-	if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) player->ySpeed = -player->speed;
-	if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN])  player->ySpeed = player->speed;
-	if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) player->xSpeed = -player->speed;
-	if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) player->xSpeed = player->speed;
-	if (event.type == SDL_KEYDOWN && keystate[SDL_SCANCODE_G] && !gpressed && !player->editMode) {
+	static int gpressed = 0;
+	static int escapepressed = 0;
+	if ((keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) && !player->pauseMenuOpen) player->ySpeed = -player->speed;
+	if ((keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) && !player->pauseMenuOpen)  player->ySpeed = player->speed;
+	if ((keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) && !player->pauseMenuOpen) player->xSpeed = -player->speed;
+	if ((keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) && !player->pauseMenuOpen) player->xSpeed = player->speed;
+	// Edit mode toggle
+	if (keystate[SDL_SCANCODE_G] && !gpressed) {
 		gpressed = 1;
-		player->editMode = 1;
+		player->editMode = !player->editMode;
 		printf("Edit mode: %d\n", player->editMode);
 	}
-	else if (event.type == SDL_KEYDOWN && keystate[SDL_SCANCODE_G] && player->editMode && !gpressed) {
-		gpressed = 1;
-		player->editMode = 0;
-		printf("Edit mode: %d\n", player->editMode);
+	if (!keystate[SDL_SCANCODE_G]) {
+		gpressed = 0;
 	}
 
-	if (event.type == SDL_KEYUP) {
-		if (keystate[SDL_SCANCODE_G]) gpressed = 0;
+	// Pause menu toggle
+	if (keystate[SDL_SCANCODE_ESCAPE] && !escapepressed) {
+		escapepressed = 1;
+		player->pauseMenuOpen = !player->pauseMenuOpen;
+		printf("Pause menu: %s\n", player->pauseMenuOpen ? "Open" : "Closed");
 	}
+	if (!keystate[SDL_SCANCODE_ESCAPE]) {
+		escapepressed = 0;
+	}
+
 } 
 /**
  * @brief Moves the character. Also handles boundary checking
@@ -69,8 +76,6 @@ bool addItemToHotbar(Hotbar* hotbar, Item* item, int slotIndex) {
 	if (hotbar == NULL || item == NULL || slotIndex < 0 || slotIndex > HOTBAR_SIZE) {
 		return false;
 	}
-
-
 	hotbar->items[slotIndex].item = item;
     item->slot = slotIndex;
 	printf("Added to Slot:\n", slotIndex);
@@ -143,5 +148,6 @@ void initPlayer(Character* player) {
 	player->height = TILE_SIZE * 2;
 	player->texture = NULL;
 	player->hotbar.selectedSlot = 0;
+	player->pauseMenuOpen = 0;
 	player->selectedItem = player->hotbar.items[player->hotbar.selectedSlot];
 }

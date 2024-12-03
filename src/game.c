@@ -13,6 +13,7 @@
 #include "saveManager.h"
 #include "map.h"
 #include "mainMenu.h"
+#include "pauseMenu.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -21,6 +22,7 @@ SDL_Renderer* gameRenderer = NULL;
 SDL_Texture* gameTexture = NULL;
 
 int offsetX = 0, offsetY = 0, tileX = 0, tileY = 0;
+int PauseMenuReturns = 999;	
 void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera);
 Uint32 frameStart;
 int frameTime;
@@ -31,7 +33,7 @@ float deltaTime = 0.0f;
 * @returns void
 */
 int GameInit() {
-
+	PauseMenuReturns = 999;
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
 		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 		return -1;
@@ -78,6 +80,7 @@ int GameInit() {
 	SDL_DestroyWindow(gameWindow);
 	IMG_Quit();
 	SDL_Quit();
+	if (PauseMenuReturns == 2) GameInit();
 	return 0;
 }
 /**
@@ -129,49 +132,36 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 
 				}
 			}
-			if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT) {
+			if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && player->editMode) {
 				editTile(tileX, tileY, 1);
 			}
-			else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+			else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && player->editMode) {
 				editTile(tileX, tileY, 0);
 			}
 			if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
-				case SDLK_1:
-					player->hotbar.selectedSlot = 1;
-					break;
-				case SDLK_2:
-					player->hotbar.selectedSlot = 2;
-					break;
-				case SDLK_3:
-					player->hotbar.selectedSlot = 3;
-					break;
-				case SDLK_4:
-					player->hotbar.selectedSlot = 4;
-					break;
-				case SDLK_5:
-					player->hotbar.selectedSlot = 5;
-					break;
-				case SDLK_6:
-					player->hotbar.selectedSlot = 6;
-					break;
-				case SDLK_7:
-					player->hotbar.selectedSlot = 7;
-					break;
-				case SDLK_8:
-					player->hotbar.selectedSlot = 8;
-					break;
-				case SDLK_9:
-					player->hotbar.selectedSlot = 9;
-					break;
+				case SDLK_1: player->hotbar.selectedSlot = 1; break;
+				case SDLK_2: player->hotbar.selectedSlot = 2; break;
+				case SDLK_3: player->hotbar.selectedSlot = 3; break;
+				case SDLK_4: player->hotbar.selectedSlot = 4; break;
+				case SDLK_5: player->hotbar.selectedSlot = 5; break;
+				case SDLK_6: player->hotbar.selectedSlot = 6; break;
+				case SDLK_7: player->hotbar.selectedSlot = 7; break;
+				case SDLK_8: player->hotbar.selectedSlot = 8; break;
+				case SDLK_9: player->hotbar.selectedSlot = 9; break;
 				}
 			}
 		}
 
-		handleKeyboardInput(player, keystate, deltaTime, event);
+		handleKeyboardInput(player, keystate);
 		SDL_RenderClear(renderer);
 		renderGame(renderer, grassTexture, otherTexture, player, camera);
-		if (player->editMode) {
+		if (player->pauseMenuOpen) {
+			
+			PauseMenuReturns = PauseMenu(gameRenderer, player, captureGameFrame(renderer));
+		}
+		if (PauseMenuReturns == 2) quit = 1;
+		if (player->editMode && !player->pauseMenuOpen) {
 			int mouseX, mouseY;
 			SDL_GetMouseState(&mouseX, &mouseY);
 			offsetX = mouseX + camera->x;
