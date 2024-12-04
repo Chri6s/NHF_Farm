@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "debugmalloc.h"
 #include "settingsMenu.h"
+#include "pauseMenu.h"
 /**
 * @brief This function is the main logic of the Camera, used for checking if the camera's edges hit the bounds.
 * @param camera The camera that needs this logic

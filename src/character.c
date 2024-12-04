@@ -2,7 +2,6 @@
 #include "structures.h"
 #include "game.h"
 #include "main.h"
-#include <stdio.h>
 #include <stdbool.h>
 /**
  * @brief Handles Keyboard inputs
@@ -17,15 +16,26 @@ void handleKeyboardInput(Character* player, const Uint8* keystate) {
 	player->ySpeed = 0;
 	static int gpressed = 0;
 	static int escapepressed = 0;
+	// movement
 	if ((keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) && !player->pauseMenuOpen) player->ySpeed = -player->speed;
 	if ((keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) && !player->pauseMenuOpen)  player->ySpeed = player->speed;
 	if ((keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) && !player->pauseMenuOpen) player->xSpeed = -player->speed;
 	if ((keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) && !player->pauseMenuOpen) player->xSpeed = player->speed;
+	// hotbar / inventory
+	if (keystate[SDL_SCANCODE_1]) player->hotbar.selectedSlot = 1;
+	if (keystate[SDL_SCANCODE_2]) player->hotbar.selectedSlot = 2;
+	if (keystate[SDL_SCANCODE_3]) player->hotbar.selectedSlot = 3;
+	if (keystate[SDL_SCANCODE_4]) player->hotbar.selectedSlot = 4;
+	if (keystate[SDL_SCANCODE_5]) player->hotbar.selectedSlot = 5;
+	if (keystate[SDL_SCANCODE_6]) player->hotbar.selectedSlot = 6;
+	if (keystate[SDL_SCANCODE_7]) player->hotbar.selectedSlot = 7;
+	if (keystate[SDL_SCANCODE_8]) player->hotbar.selectedSlot = 8;
+	if (keystate[SDL_SCANCODE_9]) player->hotbar.selectedSlot = 9;
+
 	// Edit mode toggle
 	if (keystate[SDL_SCANCODE_G] && !gpressed) {
 		gpressed = 1;
 		player->editMode = !player->editMode;
-		printf("Edit mode: %d\n", player->editMode);
 	}
 	if (!keystate[SDL_SCANCODE_G]) {
 		gpressed = 0;
@@ -35,7 +45,6 @@ void handleKeyboardInput(Character* player, const Uint8* keystate) {
 	if (keystate[SDL_SCANCODE_ESCAPE] && !escapepressed) {
 		escapepressed = 1;
 		player->pauseMenuOpen = !player->pauseMenuOpen;
-		printf("Pause menu: %s\n", player->pauseMenuOpen ? "Open" : "Closed");
 	}
 	if (!keystate[SDL_SCANCODE_ESCAPE]) {
 		escapepressed = 0;

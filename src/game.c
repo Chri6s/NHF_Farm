@@ -40,7 +40,7 @@ int GameInit() {
 	}
 
 	gameWindow = initWindow("FarmR", settings.screen_x, settings.screen_y);
-	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_TEXTUREACCESS_TARGET);
 	if (MainMenu(gameRenderer) == 0) {
 		return 0;
 	}
@@ -138,29 +138,16 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 			else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && player->editMode) {
 				editTile(tileX, tileY, 0);
 			}
-			if (event.type == SDL_KEYDOWN) {
-				switch (event.key.keysym.sym) {
-				case SDLK_1: player->hotbar.selectedSlot = 1; break;
-				case SDLK_2: player->hotbar.selectedSlot = 2; break;
-				case SDLK_3: player->hotbar.selectedSlot = 3; break;
-				case SDLK_4: player->hotbar.selectedSlot = 4; break;
-				case SDLK_5: player->hotbar.selectedSlot = 5; break;
-				case SDLK_6: player->hotbar.selectedSlot = 6; break;
-				case SDLK_7: player->hotbar.selectedSlot = 7; break;
-				case SDLK_8: player->hotbar.selectedSlot = 8; break;
-				case SDLK_9: player->hotbar.selectedSlot = 9; break;
-				}
-			}
 		}
 
 		handleKeyboardInput(player, keystate);
 		SDL_RenderClear(renderer);
 		renderGame(renderer, grassTexture, otherTexture, player, camera);
 		if (player->pauseMenuOpen) {
-			
-			PauseMenuReturns = PauseMenu(gameRenderer, player, captureGameFrame(renderer));
+			SDL_Texture* background = generateBackground(renderer);
+			PauseMenuReturns = PauseMenu(gameRenderer, player, background);
 		}
-		if (PauseMenuReturns == 2) quit = 1;
+		if (PauseMenuReturns == 2 || PauseMenuReturns == 0) quit = 1;
 		if (player->editMode && !player->pauseMenuOpen) {
 			int mouseX, mouseY;
 			SDL_GetMouseState(&mouseX, &mouseY);
