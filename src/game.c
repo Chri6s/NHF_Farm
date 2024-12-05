@@ -27,6 +27,7 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 Uint32 frameStart;
 int frameTime;
 float deltaTime = 0.0f;
+int editMode = 0;
 
 /**
 * @brief The main Initalization function for the game.
@@ -117,8 +118,8 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 	int quit = 0;
 
 	while (quit == 0) {
-		frameStart = SDL_GetTicks();
 		while (SDL_PollEvent(&event)) {
+			frameStart = SDL_GetTicks();
 			if (event.type == SDL_QUIT) {
 				quit = 1;
 				return NULL;

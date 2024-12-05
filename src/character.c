@@ -1,45 +1,21 @@
 #include "character.h"
 #include "structures.h"
 #include "game.h"
-#include "main.h"
-#include <stdbool.h>
-/**
- * @brief Handles Keyboard inputs
- * @param player The player that data needs to be changed on input
- * @param keystate The key the user presses
- * @param deltaTime The deltaTime constant, used for calculating speed so it's not affected by FPS
- * @param event the main event gets emitted on input
- * @returns void
- */
-void handleKeyboardInput(Character* player, const Uint8* keystate) {
-	player->xSpeed = 0;
-	player->ySpeed = 0;
-	static int gpressed = 0;
-	static int escapepressed = 0;
-	// movement
-	if ((keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) && !player->pauseMenuOpen) player->ySpeed = -player->speed;
-	if ((keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) && !player->pauseMenuOpen)  player->ySpeed = player->speed;
-	if ((keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) && !player->pauseMenuOpen) player->xSpeed = -player->speed;
-	if ((keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) && !player->pauseMenuOpen) player->xSpeed = player->speed;
-	// hotbar / inventory
-	if (keystate[SDL_SCANCODE_1]) player->hotbar.selectedSlot = 1;
-	if (keystate[SDL_SCANCODE_2]) player->hotbar.selectedSlot = 2;
-	if (keystate[SDL_SCANCODE_3]) player->hotbar.selectedSlot = 3;
-	if (keystate[SDL_SCANCODE_4]) player->hotbar.selectedSlot = 4;
-	if (keystate[SDL_SCANCODE_5]) player->hotbar.selectedSlot = 5;
-	if (keystate[SDL_SCANCODE_6]) player->hotbar.selectedSlot = 6;
-	if (keystate[SDL_SCANCODE_7]) player->hotbar.selectedSlot = 7;
-	if (keystate[SDL_SCANCODE_8]) player->hotbar.selectedSlot = 8;
-	if (keystate[SDL_SCANCODE_9]) player->hotbar.selectedSlot = 9;
+#include <SDL.h>
 
-	// Edit mode toggle
-	if (keystate[SDL_SCANCODE_G] && !gpressed) {
-		gpressed = 1;
-		player->editMode = !player->editMode;
+void handleKeyboardInput(Character* player, const Uint8* keystate, float deltaTime) {
+	float speed = 394.5f;
+	if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) moveCharacter(player, 0, -speed * deltaTime);
+	if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) moveCharacter(player, 0, speed * deltaTime);
+	if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) moveCharacter(player, -speed * deltaTime, 0);
+	if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) moveCharacter(player, speed * deltaTime, 0);
+	if (keystate[SDL_SCANCODE_G] || editMode == 0) { 
+		editMode = 1;
 	}
-	if (!keystate[SDL_SCANCODE_G]) {
-		gpressed = 0;
-	}
+	else if (keystate[SDL_SCANCODE_G] || editMode == 1) {
+		editMode = 0;
+	};
+} 
 
 	// Pause menu toggle
 	if (keystate[SDL_SCANCODE_ESCAPE] && !escapepressed) {
