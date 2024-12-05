@@ -25,7 +25,7 @@ int checkForSavesFolder() {
     return access("./saves", F_OK) != -1 ? 1 : 0;
 }
 
-void createNewSave() {
+void createNewSave(Map* map) {
     initializeMap("NewGame");
     Save* currentSave = (Save*)malloc(sizeof(Save));
     if (currentSave == NULL) {
@@ -36,7 +36,7 @@ void createNewSave() {
     strcpy_s(currentSave->saveName, sizeof(currentSave->saveName), map->name);
 }
 
-void saveGame(Save* save) {
+void saveGame(Save* save, Map* map) {
     if (!checkForSavesFolder()) {
         if (_mkdir("../saves") == 0) printf("Creating saves folder failed!");
     }

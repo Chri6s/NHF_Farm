@@ -6,11 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern Map* map;
 
-void initializeMap(const char* name);
+Map* initializeMap(const char* name);
 
-void loadMap(const char* filename);
+void loadMap(const char* filename, Map* map);
 
 void unloadMap(Map* map);
 

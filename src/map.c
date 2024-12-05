@@ -2,10 +2,10 @@
 #include "debugmalloc.h"
 #include <stdio.h>
 
-Map *map;
 
-void initializeMap(const char* name) {
-    map = (Map*)malloc(sizeof(Map));
+
+Map* initializeMap(const char* name) {
+    Map* map = (Map*)malloc(sizeof(Map));
     if (map == NULL) {
         printf("Error: Could not allocate memory for map\n");
         return;
@@ -25,9 +25,10 @@ void initializeMap(const char* name) {
             map->blocks[x][y].planatable = 0;
         }
     }
+    return map;
 }
 
-void loadMap(const char* filename) {
+void loadMap(const char* filename, Map* map) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
         printf("Error: Could not open map file: %s\n", filename);
@@ -64,7 +65,7 @@ void loadMap(const char* filename) {
     printf("Map loaded successfully: %s\n", map->name);
 }
 
-void saveMap(const char* filename) {
+void saveMap(const char* filename, Map* map) {
     if (map == NULL) {
         printf("Error: No map to save\n");
         return;

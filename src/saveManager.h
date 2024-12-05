@@ -1,6 +1,3 @@
 #include "structures.h"
-void LoadFromFile();
-void createNewSave();
-void overwriteSave();
-void saveGame(Save* save);
-void generateSave();
+void createNewSave(Map* map);
+void saveGame(Save* save, Map* map);
