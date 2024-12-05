@@ -49,7 +49,7 @@ void updateCamera(Camera* camera, Character* player) {
 * @param camera The camera that's view need to be renderer.
 * @returns void
 */
-void renderMap(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* otherTexture, Camera* camera) {
+void renderMap(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* otherTexture, Camera* camera, Map* map) {
 	int startTileX = camera->x / (TILE_SIZE);
 	int startTileY = camera->y / (TILE_SIZE);
 	int endTileX = (camera->x + camera->width) / (TILE_SIZE);
@@ -132,10 +132,10 @@ void renderTileOutline(SDL_Renderer* renderer, int selectedTileX, int selectedTi
 * @param camera The camera's data
 * @returns void
 */
-void renderGame(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* otherTexture, Character* player, Camera* camera) {
+void renderGame(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* otherTexture, Character* player, Camera* camera, Map* map) {
 	updateCamera(camera, player);
 	updatePlayerPos(player);
-	renderMap(renderer, grassTexture, otherTexture, camera);
+	renderMap(renderer, grassTexture, otherTexture, camera, map);
 	renderCharacter(renderer, player, camera);
 	SDL_RenderPresent(renderer);
 }
