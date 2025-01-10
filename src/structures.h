@@ -58,15 +58,14 @@ typedef struct Character {
 	SDL_Texture* texture;
 } Character;
 
+typedef struct GameSettings{
+	int screen_x, screen_y, target_fps;
+} GameSettings;
 
 typedef struct Camera{
 	float x, y;
 	int width, height;
 } Camera;
-
-typedef struct GameSettings{
-	int screen_x, screen_y, target_fps;
-} GameSettings;
 
 typedef struct Save {
 	char saveName[50];

@@ -121,7 +121,7 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 			frameStart = SDL_GetTicks();
 			if (event.type == SDL_QUIT) {
 				quit = 1;
-				return NULL;
+				return;
 			}
 			else if (event.type == SDL_WINDOWEVENT) {
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {

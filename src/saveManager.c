@@ -2,10 +2,20 @@
 #include "definitions.h"
 #include "saveManager.h"
 #include "map.h"
-#include <direct.h>
-#include <io.h>
 #define access _access
 #define F_OK 0
+#ifdef _WIN32
+    #include <io.h>
+    #include <direct.h>
+    #include <tchar.h>
+    #define mkdir _mkdir
+    #define strcpy strcpy_s
+    #define fopen fopen_s
+    #define sprintf sprintf_s
+    #define snprintf _snprintf
+#else
+    #include <unistd.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -13,8 +23,7 @@
 #include "crypto/base64.h"
 #include "crypto/vigenere.h"
 #include "debugmalloc.h"
-#include <windows.h>
-#include <tchar.h>
+
 
 typedef struct SaveList {
 	int count;
@@ -33,24 +42,24 @@ void createNewSave(Map* map) {
         exit(1);
     }
     currentSave->mapdata = (Map*)malloc(sizeof(Block) * MAP_WIDTH * MAP_HEIGHT);
-    strcpy_s(currentSave->saveName, sizeof(currentSave->saveName), map->name);
+    strcpy(currentSave->saveName, sizeof(currentSave->saveName), map->name);
 }
 
 void saveGame(Save* save, Map* map) {
     if (!checkForSavesFolder()) {
-        if (_mkdir("../saves") == 0) printf("Creating saves folder failed!");
+        if (mkdir("../saves") == 0) printf("Creating saves folder failed!");
     }
     FILE* saveFile;
     char savePath[100];
-    sprintf_s(savePath, sizeof(savePath), "../saves/%s.save", map->name);
-    fopen_s(&saveFile, savePath, "wb");
+    sprintf(savePath, sizeof(savePath), "../saves/%s.save", map->name);
+    fopen(&saveFile, savePath, "wb");
     if (saveFile == NULL) {
         printf("Error opening file!\n");
         exit(1);
     }
 
     char header[72];
-    sprintf_s(header, sizeof(header), "%s|%s\n", save->LastPlayed, save->saveName);
+    sprintf(header, sizeof(header), "%s|%s\n", save->LastPlayed, save->saveName);
 
     size_t dataSize = sizeof(header) + sizeof(Block) * MAP_WIDTH * MAP_HEIGHT;
     char* data = (char*)malloc(dataSize);

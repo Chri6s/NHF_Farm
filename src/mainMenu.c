@@ -5,22 +5,29 @@
 #include <SDL_ttf.h>
 #include <stdio.h>
 #include "definitions.h"
-#include "savemanager.h"
+#include "saveManager.h"
 #include "structures.h"
 #include "main.h"
 #include "render.h"
+#ifdef _WIN32
 #include <windows.h>
 #include <commdlg.h>
-
+#else
+#include <unistd.h>
+#include <string.h>
+#include <limits.h>
+#endif
 
 // Utility function prototypes
 void getExecutableDirectory(char* buffer, size_t size);
 void renderButton(SDL_Renderer* renderer, SDL_Texture* texture, Button button);
 int MainMenu(SDL_Renderer* renderer);
 
-// Utility implementations
+#ifdef _WIN32
 void getExecutableDirectory(char* buffer, size_t size) {
+
     GetModuleFileName(NULL, buffer, size);
+
     char* lastSlash = strrchr(buffer, '\\');
     if (lastSlash) {
         *lastSlash = '\0';
@@ -63,7 +70,28 @@ void openFileAndLoad() {
         printf("No file selected or an error occurred.\n");
     }
 }
+#else
+void getExecutableDirectory(char* buffer, size_t size) {
+    // Olvassuk ki a futó program elérési útját
+    ssize_t len = readlink("/proc/self/exe", buffer, size - 1);
 
+    if (len != -1) {
+        buffer[len] = '\0';  // Null-terminálás
+
+        // Keressük meg az utolsó '/' karaktert
+        char* lastSlash = strrchr(buffer, '/');
+        if (lastSlash) {
+            *lastSlash = '\0';  // A fájlútvonal vége a könyvtárig
+        }
+    } else {
+        perror("readlink");
+        buffer[0] = '\0';  // Hiba esetén üres stringet adunk vissza
+    }
+}
+void openFileAndLoad() {
+    //bocsi tesikem ez meg linuxon nincsen implementalva :-(
+}
+#endif
 int MainMenu(SDL_Renderer* renderer) {
     SDL_Texture* background = loadTexture("assets/mainMenu/mainMenu.png", renderer);
     SDL_Texture* newGameButtonTexture = loadTexture("assets/mainMenu/NewGame.png", renderer);
