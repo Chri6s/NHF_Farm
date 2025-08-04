@@ -1,8 +1,7 @@
 #include "character.h"
-#include "structures.h"
+#include "character_structs.h"
 #include "game.h"
 #include "main.h"
-#include <stdbool.h>
 /**
  * @brief Handles Keyboard inputs
  * @param player The player that data needs to be changed on input
@@ -81,14 +80,14 @@ void updatePlayerPos(Character* player) {
  * @param slotIndex The slot index where the item needs to be added
  * @returns bool
  */
-bool addItemToHotbar(Hotbar* hotbar, Item* item, int slotIndex) {
+int addItemToHotbar(Hotbar* hotbar, Item* item, int slotIndex) {
 	if (hotbar == NULL || item == NULL || slotIndex < 0 || slotIndex > HOTBAR_SIZE) {
-		return false;
+		return 0;
 	}
 	hotbar->items[slotIndex].item = item;
     item->slot = slotIndex;
-	printf("Added to Slot:\n", slotIndex);
-	return true;
+	printf("Added to Slot: %d\n", slotIndex);
+	return 1;
 }
 /**
  * @brief Removes an item from the hotbar
@@ -110,18 +109,18 @@ void removeItemFromHotbar(Hotbar* hotbar, int slotIndex) {
  * @param hotbar The hotbar that needs to be initialized
  * @returns void
  */
-void initHotbar(Hotbar* hotbar) {
+void initHotbar(Hotbar* hotbar, GameSettings* settings) {
 	SDL_memset(hotbar, 0, sizeof(Hotbar));
 	for (int i = 0; i < HOTBAR_SIZE; i++) {
-		hotbar->items[i].slot.x = (settings.screen_x / 2 - hotbar->items[i].slot.w / 2) - (hotbar->items[i].slot.w / 2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
-		hotbar->items[i].slot.y = (settings.screen_y - (ORIGINAL_TILE_SIZE * 4) - ORIGINAL_TILE_SIZE);
+		hotbar->items[i].slot.x = (settings->screen_x / 2 - hotbar->items[i].slot.w / 2) - (hotbar->items[i].slot.w / 2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
+		hotbar->items[i].slot.y = (settings->screen_y - (ORIGINAL_TILE_SIZE * 4) - ORIGINAL_TILE_SIZE);
 	}
 	for (int i = 0; i < 8; i++) {
 		SDL_Rect rect;
 		rect.w = ORIGINAL_TILE_SIZE * 4;
 		rect.h = ORIGINAL_TILE_SIZE * 4;
-		rect.y = (settings.screen_y - (ORIGINAL_TILE_SIZE * 4) - ORIGINAL_TILE_SIZE);
-		rect.x = (settings.screen_x / 2 - rect.w / 2) - (rect.w / 2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
+		rect.y = (settings->screen_y - (ORIGINAL_TILE_SIZE * 4) - ORIGINAL_TILE_SIZE);
+		rect.x = (settings->screen_x / 2 - rect.w / 2) - (rect.w / 2) - 3 * (ORIGINAL_TILE_SIZE * 4) + i * (ORIGINAL_TILE_SIZE * 4);
 		hotbar->items[i].slot = rect;
 		hotbar->items[i].item = NULL;
 	}
@@ -147,12 +146,12 @@ void freeHotbar(Hotbar* hotbar) {
  * @returns void
  */
 void initPlayer(Character* player) {
-	player->x = (MAP_WIDTH / 2);
-	player->y = (MAP_HEIGHT / 2);
+	player->x = 40;
+	player->y = 40;
 	player->xSpeed = 0;
 	player->ySpeed = 0;
 	player->speed = 20;
-	player->editMode = 1;
+	player->editMode = 0;
 	player->width = TILE_SIZE;
 	player->height = TILE_SIZE * 2;
 	player->texture = NULL;

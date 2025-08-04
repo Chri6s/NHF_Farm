@@ -1,41 +1,39 @@
 ﻿#include "pauseMenu.h"
-#include "main.h"
-#include "render.h"
 
 
 
-
-SDL_Texture* generateBackground(SDL_Renderer* renderer) { // Valamiért ez a függvény nem tudja normálisan capture-olni a képernyőt, és csak egy szürke képet ad vissza...
+// Valamiért ez a függvény nem tudja normálisan capture-olni a képernyőt, és csak egy szürke képet ad vissza...
+SDL_Texture* generateBackground(SDL_Renderer* i_renderer) {
 		SDL_Rect viewport;
-		SDL_RenderGetViewport(renderer, &viewport);
+		SDL_RenderGetViewport(i_renderer, &viewport);
 
 		// Create a target texture to hold the screenshot
-		SDL_Texture* targetTexture = SDL_CreateTexture(renderer,
+		SDL_Texture* targetTexture = SDL_CreateTexture(i_renderer,
 			SDL_PIXELFORMAT_RGBA8888,
 			SDL_TEXTUREACCESS_TARGET,
 			viewport.w, viewport.h
 		);
 
 		// Store current render target
-		SDL_Texture* previousTarget = SDL_GetRenderTarget(renderer);
+		SDL_Texture* previousTarget = SDL_GetRenderTarget(i_renderer);
 
 		// Set new target and clear it
-		SDL_SetRenderTarget(renderer, targetTexture);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		SDL_RenderClear(renderer);
+		SDL_SetRenderTarget(i_renderer, targetTexture);
+		SDL_SetRenderDrawColor(i_renderer, 0, 0, 0, 0);
+		SDL_RenderClear(i_renderer);
 
 		// Copy the current renderer content
-		SDL_RenderCopy(renderer, previousTarget, NULL, NULL);
+		SDL_RenderCopy(i_renderer, previousTarget, NULL, NULL);
 
 		// Reset to previous target
-		SDL_SetRenderTarget(renderer, previousTarget);
+		SDL_SetRenderTarget(i_renderer, previousTarget);
 
 		return targetTexture;
 }
 
 
-int PauseMenu(SDL_Renderer* renderer, Character* player, SDL_Texture* background) {
-	SDL_Rect backgroundRect = { 0, 0, settings.screen_x, settings.screen_y };
+int PauseMenu(SDL_Renderer* renderer, Character* player, GameSettings* settings, SDL_Texture* background) {
+	SDL_Rect backgroundRect = { 0, 0, settings->screen_x, settings->screen_y };
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 20, 20, 20, 120);
 	SDL_RenderFillRect(renderer, NULL);
@@ -44,9 +42,9 @@ int PauseMenu(SDL_Renderer* renderer, Character* player, SDL_Texture* background
 	SDL_Texture* saveGame = loadTexture("assets/saveGame.png", renderer);
 	SDL_Texture* BTM = loadTexture("assets/BTM.png", renderer);
 
-	Button resumeButton = { "newGame", {settings.screen_x / 2 - 100, settings.screen_y / 2 - 100, 200, 50} };
-	Button saveGameButton = { "loadGame", {settings.screen_x / 2 - 100, settings.screen_y / 2, 200, 50} };
-	Button BTMButton = { "exit", {settings.screen_x / 2 - 100, settings.screen_y / 2 + 100, 200, 50} };
+	Button resumeButton = { "newGame", {settings->screen_x / 2 - 100, settings->screen_y / 2 - 100, 200, 50} };
+	Button saveGameButton = { "loadGame", {settings->screen_x / 2 - 100, settings->screen_y / 2, 200, 50} };
+	Button BTMButton = { "exit", {settings->screen_x / 2 - 100, settings->screen_y / 2 + 100, 200, 50} };
 
 	renderButton(renderer, resume, resumeButton);
 	renderButton(renderer, saveGame, saveGameButton);

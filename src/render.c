@@ -1,14 +1,10 @@
 #include "main.h"
 #include "render.h"
-#include "definitions.h"
-#include "structures.h"
 #include "map.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "debugmalloc.h"
-#include "settingsMenu.h"
-#include "pauseMenu.h"
+#include "character_structs.h"
+#include "character.h"
+#include "ui_structs.h"
+
 /**
 * @brief This function is the main logic of the Camera, used for checking if the camera's edges hit the bounds.
 * @param camera The camera that needs this logic
@@ -139,22 +135,7 @@ void renderGame(SDL_Renderer* renderer, SDL_Texture* grassTexture, SDL_Texture* 
 	renderCharacter(renderer, player, camera);
 	SDL_RenderPresent(renderer);
 }
-/*
-* @brief Loads a texture from the specified path
-* @param path The path to the image
-* @param renderer The renderer to load the texture into
-* @returns SDL_Texture* 
-*/
-SDL_Texture* loadTexture(const char* path, SDL_Renderer* renderer) {
-	SDL_Surface* loadedSurface = IMG_Load(path);
-	if (!loadedSurface) {
-		printf("Can't load image. Error: %s", IMG_GetError());
-		return NULL;
-	}
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-	SDL_FreeSurface(loadedSurface);
-	return texture;
-}
+
 /*
 * @brief Helper function, creates a screen centered on the screen.
 * @param windowName The name of the window
@@ -181,7 +162,4 @@ SDL_Window* initWindow(const char* windowName, int width, int height) {
 	}
 
 	return window;
-}
-void renderButton(SDL_Renderer* renderer, SDL_Texture* texture, Button button) {
-	SDL_RenderCopy(renderer, texture, NULL, &button.box);
 }

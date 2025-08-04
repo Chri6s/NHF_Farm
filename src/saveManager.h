@@ -1,3 +1,8 @@
-#include "structures.h"
-void createNewSave(Map* map);
-void saveGame(Save* save, Map* map);
+#pragma once
+struct Map;
+struct Save;
+
+int checkForSavesFolder();
+void createNewSave(struct Map* map);
+void saveGame(struct Save* save, struct Map* map);
+

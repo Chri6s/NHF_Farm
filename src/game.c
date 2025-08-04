@@ -5,43 +5,37 @@
 		   This file is the main "conductor" of this orchestra.
 	Making the renderer load tiles, draw tiles and other game mechanics.;
 */
-#include "definitions.h"
-#include "structures.h"
 #include "render.h"
 #include "character.h"
 #include "main.h"
 #include "saveManager.h"
 #include "map.h"
-#include "mainMenu.h"
-#include "pauseMenu.h"
+#include "menus/mainMenu.h"
+#include "menus/pauseMenu.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-SDL_Window* gameWindow = NULL;
 SDL_Renderer* gameRenderer = NULL;
-SDL_Texture* gameTexture = NULL;
 
-int offsetX = 0, offsetY = 0, tileX = 0, tileY = 0;
 int PauseMenuReturns = 999;	
-void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera, Map* map);
-Uint32 frameStart;
-int frameTime;
-float deltaTime = 0.0f;
+void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera, Map* map, GameSettings* settings);
 
 /**
 * @brief The main Initalization function for the game.
 * @returns void
 */
-int GameInit() {
+int GameInit(GameSettings* settings) {
+	SDL_Window* gameWindow = NULL;
+	
 	PauseMenuReturns = 999;
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
 		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 		return -1;
 	}
 
-	gameWindow = initWindow("FarmR", settings.screen_x, settings.screen_y);
+	gameWindow = initWindow("FarmR", settings->screen_x, settings->screen_y);
 	gameRenderer = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_TEXTUREACCESS_TARGET);
-	if (MainMenu(gameRenderer) == 0) {
+	if (MainMenu(gameRenderer, settings) == 0) {
 		return 0;
 	}
 
@@ -52,23 +46,30 @@ int GameInit() {
 	SDL_SetWindowIcon(gameWindow, iconSurface);
 	SDL_FreeSurface(iconSurface);
 
-	Camera camera = { (MAP_WIDTH / 2) * TILE_SIZE, (MAP_HEIGHT / 2) * TILE_SIZE, settings.screen_x, settings.screen_y };;
+	Camera camera = { (MAP_WIDTH / 2) * TILE_SIZE, (MAP_HEIGHT / 2) * TILE_SIZE, settings->screen_x, settings->screen_y };
 	Save* save = (Save*)malloc(sizeof(Save));
 	Character* player = (Character*)malloc(sizeof(Character));
 	initPlayer(player);
 	player->texture = characterTexture;
 	Map* map = initializeMap("NewGame");
 
+	// TODO: Implement save folder creation;
+	//printf("Checking save folder...\n");
+	//if(checkForSavesFolder() == 0) {
+	//	if(system("mkdir ./saves") == 0) {
+	//		printf("Created new folder\n");
+	//		return 1;
+	//	} else {
+	//		printf("asd\n");
 
-	if(checkForSavesFolder() == 0) {
-		if(system("mkdir -p ./saves") == 0) {
-			return 1;
-		} else {
-			return -1;
-		}
-		return 0;
-	}
-	gameLoop(gameRenderer, player, grass, &camera, map);
+	//		scanf_s("\n");
+	//		return -1;
+	//	} 
+	//	return 0;
+	//}
+	//printf("Saves folder found!\n");
+
+	gameLoop(gameRenderer, player, grass, &camera, map, settings);
 
 	//shutdown
 	free(player);
@@ -80,7 +81,7 @@ int GameInit() {
 	SDL_DestroyWindow(gameWindow);
 	IMG_Quit();
 	SDL_Quit();
-	if (PauseMenuReturns == 2) GameInit();
+	if (PauseMenuReturns == 2) GameInit(settings);
 	return 0;
 }
 /**
@@ -110,25 +111,28 @@ void editTile(int tileX, int tileY, int replaceId, Map* map) {
 * @param camera The camera used for tracking the player
 * @returns void
 */
-void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera, Map* map) {
+void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTexture, Camera* camera, Map* map, GameSettings* settings) {
 	SDL_Event event;
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 	SDL_Texture* otherTexture = loadTexture("../assets/farmland1.png", renderer);
-	int quit = 0;
+	int quit = 0, frameTime;
+	int offsetX = 0, offsetY = 0, tileX = 0, tileY = 0;
+	float deltaTime = 0.0f;
+	Uint32 frameStart = 0;
 
 	while (quit == 0) {
 		while (SDL_PollEvent(&event)) {
 			frameStart = SDL_GetTicks();
 			if (event.type == SDL_QUIT) {
 				quit = 1;
-				return NULL;
+				return;
 			}
 			else if (event.type == SDL_WINDOWEVENT) {
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-					settings.screen_x = event.window.data1;
-					settings.screen_x = event.window.data2;
-					camera->height = settings.screen_y;
-					camera->width = settings.screen_x;
+					settings->screen_x = event.window.data1;
+					settings->screen_x = event.window.data2;
+					camera->height = settings->screen_y;
+					camera->width = settings->screen_x;
 
 				}
 			}
@@ -145,7 +149,7 @@ void gameLoop(SDL_Renderer* renderer, Character* player, SDL_Texture* grassTextu
 		renderGame(renderer, grassTexture, otherTexture, player, camera, map);
 		if (player->pauseMenuOpen) {
 			SDL_Texture* background = generateBackground(renderer);
-			PauseMenuReturns = PauseMenu(gameRenderer, player, background);
+			PauseMenuReturns = PauseMenu(gameRenderer, player, settings, background);
 		}
 		if (PauseMenuReturns == 2 || PauseMenuReturns == 0) quit = 1;
 		if (player->editMode && !player->pauseMenuOpen) {

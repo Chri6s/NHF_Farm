@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
 #include "vigenere.h"
 
 #define A 65

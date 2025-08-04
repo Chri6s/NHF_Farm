@@ -1,12 +1,9 @@
 #include "settingsMenu.h"
-#include "main.h"
-#include "structures.h"
 #include <stdlib.h>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 #include <string.h>
 TTF_Font* font = NULL;
+
+
 /**
 * @brief Draws a dropdown menu with its data defined in a Dropdown struct
 * @param renderer The renderer that needs to handle the rendering of the Dropdown menu
@@ -45,28 +42,34 @@ void drawDropdown(SDL_Renderer* renderer, Dropdown* dropdown) {
 	}
 }
 
+/**
+ * @brief Parses a resolution string in the format "widthxheight" and sets the width and height values
+ * @param resolution The resolution string to parse, e.g. "1920x1080"
+ * @param width Pointer to an integer where the width will be stored
+ * @param height Pointer to an integer where the height will be stored
+ * @returns void
+*/
 void getResolution(const char* resolution, int* width, int* height) {
-	char buffer[10]; // Assuming each part (width/height) won't exceed 10 characters
+	char buffer[10]; 
 	int i = 0, j = 0;
 
 	// Extract width
 	while (resolution[i] != 'x' && resolution[i] != '\0') {
 		buffer[j++] = resolution[i++];
 	}
-	buffer[j] = '\0'; // Null-terminate the string
-	*width = atoi(buffer); // Convert width to integer
+	buffer[j] = '\0';
+	*width = atoi(buffer);
 
 	if (resolution[i] == 'x') {
-		i++; // Skip the 'x'
+		i++;
 	}
 
-	// Extract height
 	j = 0;
 	while (resolution[i] != '\0') {
 		buffer[j++] = resolution[i++];
 	}
-	buffer[j] = '\0'; // Null-terminate the string
-	*height = atoi(buffer); // Convert height to integer
+	buffer[j] = '\0';
+	*height = atoi(buffer);
 }
 /**
 * @brief Handles the events done on the dropdown menu
@@ -96,7 +99,7 @@ void handleDropdownEvent(SDL_Event* event, Dropdown* dropdown) {
 	}
 }
 
-int createSettingsMenu() {
+int createSettingsMenu(GameSettings* settings) {
 	SDL_Init(SDL_INIT_VIDEO);
 	TTF_Init();
 	font = TTF_OpenFont("../assets/fonts/Arial.ttf", 16);
@@ -126,8 +129,8 @@ int createSettingsMenu() {
 				SDL_DestroyRenderer(renderer);
 				SDL_DestroyWindow(window);
 				SDL_Quit();
-				settings.target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
-				getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings.screen_x, &settings.screen_y);
+				settings->target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
+				getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings->screen_x, &settings->screen_y);
 				running = SDL_FALSE;
 				return 0;
 			}
@@ -140,8 +143,8 @@ int createSettingsMenu() {
 					SDL_DestroyRenderer(renderer);
 					SDL_DestroyWindow(window);
 					SDL_Quit();
-					settings.target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
-					getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings.screen_x, &settings.screen_y);
+					settings->target_fps = atoi(fpsOptions[fpsDropdown.selectedOption]);
+					getResolution(resolutionOptions[resolutionDropdown.selectedOption], &settings->screen_x, &settings->screen_y);
 					running = SDL_FALSE;
 					return 1;
 				}
@@ -174,7 +177,6 @@ int createSettingsMenu() {
 
 		SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
 		SDL_RenderFillRect(renderer, &startButton);
-
 		SDL_Surface* textSurface = TTF_RenderText_Blended(font, "Start", white);
 		SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 		SDL_Rect textRect = { startButton.x + 10, startButton.y + 10, textSurface->w, textSurface->h };
@@ -186,8 +188,8 @@ int createSettingsMenu() {
 		SDL_RenderPresent(renderer);
 
 		Uint32 frameTime = SDL_GetTicks() - frameStart;
-		if (frameTime < FRAME_DELAY) {
-			SDL_Delay(FRAME_DELAY - frameTime);
+		if (frameTime < INITIAL_FRAME_DELAY) {
+			SDL_Delay(INITIAL_FRAME_DELAY - frameTime);
 		}
 	}
 

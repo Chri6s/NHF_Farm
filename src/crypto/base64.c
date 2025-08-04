@@ -1,4 +1,4 @@
-// A 4. sortól kezdve, minden kód Ahmed Elzoughby munkája. A kód forrása: https://github.com/elzoughby/Base64
+// A 4. sortÃ³l kezdve, minden kÃ³d Ahmed Elzoughby munkÃ¡ja. A kÃ³d forrÃ¡sa: https://github.com/elzoughby/Base64
 
 
 /***********************************************************

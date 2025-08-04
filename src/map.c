@@ -1,6 +1,6 @@
 #include "map.h"
-#include "debugmalloc.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 
 

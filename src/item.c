@@ -1,4 +1,4 @@
-#include "structures.h"
+#include "include/item_structs.h"
 #include "definitions.h"
 #include "item.h"
 #include <SDL.h>

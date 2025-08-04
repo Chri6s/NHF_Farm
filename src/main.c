@@ -1,12 +1,9 @@
-//#include <stdio.h>
 #include <windows.h>
 #include "game.h"
 #include "render.h"
-#include "settingsMenu.h"
+#include "menus/settingsMenu.h"
 
 
-
-extern GameSettings settings = { 60, 800, 600 };
 
 /**
 * @brief The main function that gets called on running the .exe file. This function right now, handles the startup, the settings menu before launching the game. This will be moved to another file, to make it more readable. 
@@ -15,9 +12,13 @@ extern GameSettings settings = { 60, 800, 600 };
 */
 int main(int argc, char* argv[]) {
     SetConsoleTitle(L"FarmR Debug");
-    if (createSettingsMenu() == 0) {
+    GameSettings* settings = malloc(sizeof(GameSettings));
+    settings->screen_x = 800;
+	settings->screen_y = 600;
+	settings->target_fps = 60;
+    if (createSettingsMenu(settings) == 0) {
         return 0;
-    } // mivel handle-öltük a 0-át (tehát teljesen ki akar lépni a user, így mindehogyan lefutatthatjuk a GameInit()-et.
-    GameInit();
+    } // mivel handle-ï¿½ltï¿½k a 0-ï¿½t (tehï¿½t teljesen ki akar lï¿½pni a user, ï¿½gy mindehogyan lefutatthatjuk a GameInit()-et.
+    GameInit(settings);
     return 1;
 }

@@ -1,16 +1,10 @@
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
-#include "definitions.h"
-#include "structures.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "include/map_structs.h"
+#include "include/sdl_includes.h"
 
+struct Map;
 
 Map* initializeMap(const char* name);
-
-void loadMap(const char* filename, Map* map);
-
-void unloadMap(Map* map);
-
-#endif
+void loadMap(const char* filename, struct Map* map);
+void unloadMap(struct Map* map);

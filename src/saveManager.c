@@ -1,20 +1,22 @@
-#include "structures.h"
 #include "definitions.h"
 #include "saveManager.h"
 #include "map.h"
-#include <direct.h>
-#include <io.h>
-#define access _access
+#include "crypto/base64.h"
+#include "crypto/vigenere.h"
+
 #define F_OK 0
+#include <io.h>
+#include <direct.h>
+#include <tchar.h>
+#define mkdir _mkdir
+#define strcpy strcpy_s
+#define fopen fopen_s
+#define sprintf sprintf_s
+#define snprintf _snprintf
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <stdio.h>
-#include "crypto/base64.h"
-#include "crypto/vigenere.h"
-#include "debugmalloc.h"
-#include <windows.h>
-#include <tchar.h>
 
 typedef struct SaveList {
 	int count;
@@ -22,13 +24,13 @@ typedef struct SaveList {
 } SaveList;
 
 int checkForSavesFolder() {
-    return access("./saves", F_OK) != -1 ? 1 : 0;
+    return _access("./saves", F_OK) != -1 ? 1 : 0;
 }
 
 void createNewSave(Map* map) {
     initializeMap("NewGame");
     Save* currentSave = (Save*)malloc(sizeof(Save));
-    if (currentSave == NULL) {
+    if (!currentSave) {
         printf("Memory allocation failed!\n");
         exit(1);
     }

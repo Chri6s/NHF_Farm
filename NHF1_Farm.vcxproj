@@ -111,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include; $(ProjectDir)lib\SDL2_image\include; $(ProjectDir)lib\SDL2_ttf\include </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include;$(ProjectDir)lib\SDL2_image\include;$(ProjectDir)lib\SDL2_ttf\include;$(ProjectDir)src\include</AdditionalIncludeDirectories>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <CompileAs>CompileAsC</CompileAs>
@@ -142,7 +142,7 @@ xcopy /E /I /Y "$(SolutionDir)assets" "$(SolutionDir)build\assets"
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include; $(ProjectDir)lib\SDL2_image\include; $(ProjectDir)lib\SDL2_ttf\include </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)lib\SDL2\include;$(ProjectDir)lib\SDL2_image\include;$(ProjectDir)lib\SDL2_ttf\include;$(ProjectDir)src\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
@@ -165,34 +165,43 @@ xcopy /Y "$(SolutionDir)lib\SDL2_ttf\lib\x64\SDL2_ttf.dll" "$(SolutionDir)build\
     <ClCompile Include="src\crypto\base64.c" />
     <ClCompile Include="src\crypto\vigenere.c" />
     <ClCompile Include="src\game.c" />
+    <ClCompile Include="src\include\ui_structs.c" />
     <ClCompile Include="src\item.c" />
     <ClCompile Include="src\main.c" />
-    <ClCompile Include="src\mainMenu.c" />
     <ClCompile Include="src\map.c" />
-    <ClCompile Include="src\pauseMenu.c" />
+    <ClCompile Include="src\menus\mainMenu.c" />
+    <ClCompile Include="src\menus\pauseMenu.c" />
+    <ClCompile Include="src\menus\settingsMenu.c" />
     <ClCompile Include="src\render.c" />
     <ClCompile Include="src\saveManager.c" />
-    <ClCompile Include="src\settingsMenu.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\crypto\base64.h" />
     <ClInclude Include="src\crypto\vigenere.h" />
-    <ClInclude Include="src\debugmalloc.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\include\character_structs.h" />
+    <ClInclude Include="src\include\item_structs.h" />
+    <ClInclude Include="src\include\map_structs.h" />
+    <ClInclude Include="src\include\sdl_includes.h" />
+    <ClInclude Include="src\include\settings_structs.h" />
+    <ClInclude Include="src\include\ui_structs.h" />
     <ClInclude Include="src\item.h" />
     <ClInclude Include="src\main.h" />
-    <ClInclude Include="src\mainMenu.h" />
     <ClInclude Include="src\map.h" />
-    <ClInclude Include="src\pauseMenu.h" />
+    <ClInclude Include="src\menus\mainMenu.h" />
+    <ClInclude Include="src\menus\pauseMenu.h" />
+    <ClInclude Include="src\menus\settingsMenu.h" />
     <ClInclude Include="src\render.h" />
     <ClInclude Include="src\saveManager.h" />
-    <ClInclude Include="src\settingsMenu.h" />
-    <ClInclude Include="src\structures.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="assets\app_icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="install.bat" />
+    <None Include="install.sh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

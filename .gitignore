@@ -104,3 +104,6 @@ Release/
 ipch/
 x64/
 lib/
+
+# Doxygen Documentation
+html/

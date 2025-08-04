@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\menus">
+      <UniqueIdentifier>{868fe2cd-0e7d-49c1-a6d0-21926e8eb63d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crypto">
+      <UniqueIdentifier>{e875e472-6dce-430c-98a8-46674f90429f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto">
+      <UniqueIdentifier>{8331406a-c630-4a2a-891f-663cc21d0d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\menus">
+      <UniqueIdentifier>{83c78b86-5337-4d7e-8922-195c68d4b970}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include">
+      <UniqueIdentifier>{5592d046-0753-4468-88b8-6cd26ee06505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\install_scripts">
+      <UniqueIdentifier>{a01131fd-3cce-4f07-80c1-304eb5c6265e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.c">
@@ -30,23 +48,29 @@
     <ClCompile Include="src\saveManager.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\crypto\vigenere.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\settingsMenu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\map.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\crypto\base64.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mainMenu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\item.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menus\pauseMenu.c">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menus\mainMenu.c">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menus\settingsMenu.c">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypto\base64.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypto\vigenere.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\ui_structs.c">
+      <Filter>Header Files\include</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,9 +78,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\definitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\structures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\render.h">
@@ -68,34 +89,60 @@
     <ClInclude Include="src\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\crypto\vigenere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\settingsMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\crypto\base64.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\saveManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\mainMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\debugmalloc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\item.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\menus\settingsMenu.h">
+      <Filter>Header Files\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\menus\mainMenu.h">
+      <Filter>Header Files\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\menus\pauseMenu.h">
+      <Filter>Header Files\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\crypto\vigenere.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="src\crypto\base64.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\character_structs.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\item_structs.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\map_structs.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\sdl_includes.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\settings_structs.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\ui_structs.h">
+      <Filter>Header Files\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="assets\app_icon.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="install.bat">
+      <Filter>Source Files\install_scripts</Filter>
+    </None>
+    <None Include="install.sh">
+      <Filter>Source Files\install_scripts</Filter>
+    </None>
   </ItemGroup>
 </Project>
